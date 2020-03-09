@@ -19,6 +19,7 @@ class CreateStudentAnswersTable extends Migration
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('option_id');
+            $table->integer('correct');
             $table->timestamps();
         });
     }

@@ -12,12 +12,12 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Full Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="full_name" type="text" class="form-control @error('full_name') is-invalid @enderror" name="full_name" value="{{ old('full_name') }}" required autocomplete="full_name" autofocus>
 
-                                @error('name')
+                                @error('full_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -60,7 +60,45 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="academic_id" class="col-md-4 col-form-label text-md-right">{{ __('Academic ID') }}</label>
 
+                            <div class="col-md-6">
+                                <input id="academic_id" type="tel" pattern="^[0-9]{16}$" title="please write correct academic id" class="form-control" name="academic_id" required >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="level" class="col-md-4 col-form-label text-md-right">Studying Level</label>
+                            <div class="col-md-6">
+                                <select id="level" name="level" class="form-control">
+                                    <option value="" disabled>Select Studying Level</option>
+
+                                    @foreach($levels as $level)
+                                        <option value="{{$level->id}}" >{{$level->level_title}}</option>
+                                    @endforeach
+
+
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="department" class="col-md-4 col-form-label text-md-right">Department</label>
+                            <div class="col-md-6">
+                                <select id="department" name="department" class="form-control">
+                                    <option value="" disabled>Select Department</option>
+
+                                    @foreach($departements as $department)
+                                        <option value="{{$department->id}}" >{{$department->department_title}}</option>
+                                    @endforeach
+
+
+                                </select>
+
+
+                            </div>
+                        </div>
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

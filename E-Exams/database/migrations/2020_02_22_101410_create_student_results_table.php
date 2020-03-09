@@ -18,6 +18,7 @@ class CreateStudentResultsTable extends Migration
             $table->unsignedBigInteger('student_id');
             $table->integer('marks');
             $table->integer('level');
+            $table->integer('success');
             $table->timestamps();
         });
     }

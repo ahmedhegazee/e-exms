@@ -17,11 +17,13 @@ class CreateStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('academic_id')->unique();
-            $table->integer('level');
-            $table->integer('department');
+            $table->unsignedBigInteger('level_id');
+            $table->unsignedBigInteger('department_id');
             $table->timestamps();
 
             $table->foreign('user_id')->on('users')->references('id');
+            $table->foreign('level_id')->on('levels')->references('id');
+            $table->foreign('department_id')->on('departments')->references('id');
         });
     }
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Subject\Chapter;
+use App\Http\Controllers\Controller;
+use App\Student\Student;
 use Illuminate\Http\Request;
 
-class ChaptersController extends Controller
+class StudentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +42,10 @@ class ChaptersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Subject\Chapter  $chapter
+     * @param  \App\Student\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function show(Chapter $chapter)
+    public function show(Student $student)
     {
         //
     }
@@ -52,10 +53,10 @@ class ChaptersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Subject\Chapter  $chapter
+     * @param  \App\Student\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit(Chapter $chapter)
+    public function edit(Student $student)
     {
         //
     }
@@ -64,10 +65,10 @@ class ChaptersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Subject\Chapter  $chapter
+     * @param  \App\Student\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Chapter $chapter)
+    public function update(Request $request, Student $student)
     {
         //
     }
@@ -75,10 +76,10 @@ class ChaptersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Subject\Chapter  $chapter
+     * @param  \App\Student\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Chapter $chapter)
+    public function destroy(Student $student)
     {
         //
     }

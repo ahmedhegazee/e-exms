@@ -132,8 +132,46 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'level_title' => [
+            'required' => 'The level title is required',
+            'string' => 'The level title must be string ',
+            'regex' => 'The level title must have only arabic or english characters ',
+            'min' => 'The level title must be at least 5 characters ',
+            'max' => 'The level title must not be more than 200 characters ',
+        ],
+        'department_title' => [
+            'required' => 'The department title is required',
+            'string' => 'The department title must be string ',
+            'regex' => 'The department title must have only arabic or english characters ',
+            'min' => 'The department title must be at least 5 characters ',
+            'max' => 'The department title must not be more than 200 characters ',
+        ],
+        'subject_name' => [
+            'required' => 'The subject name is required',
+            'string' => 'The subject name must be string ',
+            'regex' => 'The subject name must have only arabic or english characters ',
+            'min' => 'The subject name must be at least 5 characters ',
+            'max' => 'The subject name must not be more than 200 characters ',
+        ],
+        'subject_code' => [
+            'required' => 'The subject code is required',
+            'string' => 'The subject code must be string ',
+            'regex' => 'The subject code must have only arabic or english characters ',
+            'min' => 'The subject code must be at least 5 characters ',
+            'max' => 'The subject code must not be more than 200 characters ',
+            'unique'=>'This code is taken . The subject code must be unique.',
+        ],
+        'credit_hours' => [
+            'required' => 'The credit hours is required',
+            'numeric' => 'The credit hours must be string ',
+            'regex' => 'The credit hours must be numbers between 1 and 20 hours ',
+            'min' => 'The credit hours must be at least 1 hour ',
+            'max' => 'The credit hours must not be more than 20 hours ',
+        ],
     ],
+/*
 
+ * */
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
