@@ -18,7 +18,7 @@ class CreateExamsTable extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->string('exam_time');
+            $table->string('exam_time');//h:m
             $table->integer('marks');
             $table->foreign('subject_id')->on('subjects')->references('id');
 

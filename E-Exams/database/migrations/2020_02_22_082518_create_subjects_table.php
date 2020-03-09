@@ -17,10 +17,13 @@ class CreateSubjectsTable extends Migration
             $table->bigIncrements('id');
             $table->string('subject_name');
             $table->string('subject_code')->unique();
-            $table->integer('level');
-            $table->integer('department');
+            $table->unsignedBigInteger('level_id');
+            $table->unsignedBigInteger('department_id');
+            $table->integer('credit_hours');
             $table->unsignedBigInteger('professor_id');
             $table->foreign('professor_id')->on('professors')->references('id');
+            $table->foreign('department_id')->on('departments')->references('id');
+            $table->foreign('level_id')->on('levels')->references('id');
 
             $table->timestamps();
         });

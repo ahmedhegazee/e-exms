@@ -1932,6 +1932,198 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "LevelsPanel",
+  mounted: function mounted() {
+    this.getLevels();
+  },
+  computed: {
+    levelTitleState: function levelTitleState() {
+      if (this.levelTitle.length === 0) return null;
+      return this.levelTitle.length > 5 && this.levelTitle.length < 200 && this.validateName(this.levelTitle);
+    }
+  },
+  data: function data() {
+    return {
+      levels: [],
+      level: {},
+      fields: ['id', 'level', 'actions'],
+      levelTitle: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      message: "",
+      alert: "danger",
+      isBusy: false
+    };
+  },
+  methods: {
+    getLevels: function getLevels() {
+      var _this = this;
+
+      var self = this;
+      this.isBusy = true;
+      axios.get('/level').then(function (response) {
+        _this.levels = response.data.data;
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+      setTimeout(function () {
+        if (self.levels.length === 0) self.showAlert('Sorry there is no levels');
+        self.isBusy = false;
+      }, 3000);
+    },
+    validateName: function validateName(name) {
+      var re = /^[A-Za-z ]+$/;
+      return re.test(name);
+    },
+    countDownChanged: function countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+
+      if (this.dismissCountDown === 0) {
+        this.message = "";
+        this.alert = "danger";
+      }
+    },
+    showAlert: function showAlert() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var alert = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'danger';
+      this.message = message;
+      this.alert = alert;
+      this.dismissCountDown = this.dismissSecs;
+    },
+    //#region add new level modal
+    showAddLevelModal: function showAddLevelModal() {
+      this.levelTitle = '';
+      this.$refs.newLevelModal.show();
+    },
+    handleOkForNewLevelModal: function handleOkForNewLevelModal(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault(); // Trigger submit handler
+
+      this.handleSubmitForNewLevelModal();
+    },
+    handleSubmitForNewLevelModal: function handleSubmitForNewLevelModal() {
+      var _this2 = this;
+
+      if (!this.levelTitleState) return;
+      this.sendNewLevel();
+      this.$nextTick(function () {
+        _this2.$refs.newLevelModal.hide();
+      });
+    },
+    sendNewLevel: function sendNewLevel() {
+      var _this3 = this;
+
+      var data = new FormData();
+      data.append('level_title', this.levelTitle);
+      axios.post('/level', data).then(function (response) {
+        if (response.data.success) {
+          _this3.showAlert('New level is added', 'success');
+
+          _this3.getLevels();
+        } else {
+          _this3.showAlert(response.data.errors.join('.'));
+        }
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    //#endregion
+    //#region dept section
+    showDepartmentsModal: function showDepartmentsModal(level) {
+      this.level = level;
+      this.$refs.showDeptModal.show();
+    } //#endregion
+
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-vue/esm/bv-config.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/bv-config.js ***!
@@ -74066,6 +74258,205 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c(
+        "b-alert",
+        {
+          attrs: {
+            show: _vm.dismissCountDown,
+            dismissible: "",
+            fade: "",
+            variant: _vm.alert
+          },
+          on: { "dismiss-count-down": _vm.countDownChanged }
+        },
+        [_vm._v("\n\n        " + _vm._s(_vm.message) + "\n    ")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-end mr-5 mb-4" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.showAddLevelModal()
+              }
+            }
+          },
+          [_vm._v("Add Level")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("b-table", {
+        attrs: {
+          striped: "",
+          hover: "",
+          items: _vm.levels,
+          fields: _vm.fields,
+          "sticky-header": true,
+          busy: _vm.isBusy
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "table-busy",
+            fn: function() {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "text-center text-danger my-2" },
+                  [
+                    _c("b-spinner", { staticClass: "align-middle" }),
+                    _vm._v(" "),
+                    _c("strong", [_vm._v("Loading...")])
+                  ],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "cell(actions)",
+            fn: function(row) {
+              return [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: {
+                      click: function($event) {
+                        return _vm.showDepartmentsModal(row)
+                      }
+                    }
+                  },
+                  [_vm._v("Departments")]
+                )
+              ]
+            }
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "newLevelModal",
+          attrs: { id: "modal-prevent-closing", title: "Add New Modal" },
+          on: { ok: _vm.handleOkForNewLevelModal }
+        },
+        [
+          _c(
+            "form",
+            {
+              ref: "form",
+              attrs: { autocomplete: "off" },
+              on: {
+                submit: function($event) {
+                  $event.stopPropagation()
+                  $event.preventDefault()
+                  return _vm.handleSubmitForNewLevelModal($event)
+                }
+              }
+            },
+            [
+              _c(
+                "b-form-group",
+                {
+                  attrs: {
+                    state: _vm.levelTitleState,
+                    label: "Level Title",
+                    "label-for": "level-title-input"
+                  }
+                },
+                [
+                  _c("b-form-input", {
+                    attrs: {
+                      id: "level-title-input",
+                      autocomplete: "off",
+                      state: _vm.levelTitleState,
+                      required: ""
+                    },
+                    model: {
+                      value: _vm.levelTitle,
+                      callback: function($$v) {
+                        _vm.levelTitle = $$v
+                      },
+                      expression: "levelTitle"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-invalid-feedback",
+                    { attrs: { state: _vm.levelTitleState } },
+                    [
+                      _vm._v(
+                        "\n                    The english name length must be between 5 and 200 characters.\n                "
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        { ref: "showDeptModal", attrs: { title: "Departments in this level" } },
+        [
+          _c("div", { staticClass: "row justify-content-end" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary mr-4",
+                on: { click: function($event) {} }
+              },
+              [_vm._v("Add Dept")]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            _vm._l(_vm.level.departments, function(dept) {
+              return _c("li", { domProps: { textContent: _vm._s(dept) } })
+            }),
+            0
+          )
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\
   !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -86254,6 +86645,7 @@ Vue.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component('levels-panel', __webpack_require__(/*! ./components/LevelsPanel.vue */ "./resources/js/components/LevelsPanel.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -86375,6 +86767,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/LevelsPanel.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/LevelsPanel.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true& */ "./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true&");
+/* harmony import */ var _LevelsPanel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LevelsPanel.vue?vue&type=script&lang=js& */ "./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _LevelsPanel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "d4934b8c",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/LevelsPanel.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LevelsPanel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./LevelsPanel.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LevelsPanel.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LevelsPanel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LevelsPanel.vue?vue&type=template&id=d4934b8c&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LevelsPanel_vue_vue_type_template_id_d4934b8c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
