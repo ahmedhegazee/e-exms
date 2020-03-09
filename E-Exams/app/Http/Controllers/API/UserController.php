@@ -76,9 +76,9 @@ class UserController extends Controller
         $rules=[
             'full_name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'password' => 'required|string|regex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*#?&]{8,}$/|min:8',
             'c_password' => 'required|same:password',
-            'user_type'=>'required|numeric' // 1 for student , 2 for professor
+            'user_type'=>'required|numeric|regex:/^[1-2]{1}$/|' // 1 for student , 2 for professor
         ];
         return Validator::make($data,$rules);
     }
@@ -89,12 +89,8 @@ class UserController extends Controller
             'level_id' => 'required|numeric',
             'department_id' => 'required|numeric',
         ];
-        $messages=[
-            'academic_id.regex'=>'The academic id must be 16 digits',
-            'academic_id.required'=>'The academic id field is required',
-            'academic_id.unique'=>'The academic id must be unique',
-        ];
-        return Validator::make($data,$rules,$messages);
+
+        return Validator::make($data,$rules);
     }
     public function validateProfessorData($data)
     {

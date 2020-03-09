@@ -163,11 +163,52 @@ return [
         ],
         'credit_hours' => [
             'required' => 'The credit hours is required',
-            'numeric' => 'The credit hours must be string ',
+            'numeric' => 'The credit hours must be numbers ',
             'regex' => 'The credit hours must be numbers between 1 and 20 hours ',
             'min' => 'The credit hours must be at least 1 hour ',
             'max' => 'The credit hours must not be more than 20 hours ',
         ],
+
+
+        'academic_id' => [
+            'required' => 'The academic id field is required',
+            'string' => 'The academic id must be string contains numbers ',
+            'regex' => 'The academic id must be 16 digits ',
+            'unique'=>'This academic id is taken . The academic id must be unique.',
+        ],
+        'level_id' => [
+            'required' => 'The level id is required',
+            'numeric' => 'The level id must be numbers ',
+        ],
+        'department_id' => [
+            'required' => 'The department id is required',
+            'numeric' => 'The department id must be numbers ',
+        ],
+        'full_name' => [
+            'required' => 'The full name is required',
+            'string' => 'The full name must be string ',
+        ],
+        'email' => [
+            'required' => 'The email is required',
+            'email' => 'Write correct email ',
+            'unique' => 'This is email is token ',
+        ],
+        'password' => [
+            'required' => 'The حشسسصخقيis required',
+            'string' => 'The حشسسصخقي must be string ',
+            'regex'=>'password must be eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+            'min'=>'Password must be at least 8 characters'
+        ],
+        'c_password' => [
+            'required' => 'The confirm password is required',
+            'same' => 'Confirm password correctly ',
+        ],
+        'user_type' => [
+            'required' => 'The user type is required',
+            'numeric' => 'The user type must be numbers ',
+            'regex'=>'the user type must be either 1 for student or 2 for professor'
+        ],
+
     ],
 /*
 
