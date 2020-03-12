@@ -25,13 +25,20 @@ Route::group(['middleware'=>'localization'],function (){
             '/subject/{subject}/chapter' => 'API\ChaptersController',
             '/subject/{subject}/chapter/{chapter}/question' => 'API\QuestionsController',
             '/dept' => 'API\DepartmentsController',
+            '/term'=>'API\StudyingTermController',
+            '/year'=>'API\StudyingYearController',
+            '/professor'=>'API\ProfessorsController',
         ]);
         Route::post('/level/{level}/dept', 'API\LevelsController@addDepartments');
         Route::get('/level/{level}/dept', 'API\LevelsController@getDepartments');
+        Route::post('/year/{year}/terms', 'API\StudyingYearController@addTerms');
+        Route::get('/year/{year}/terms', 'API\StudyingYearController@getTerms');
+        Route::patch('/year/{year}/term/{term}', 'API\StudyingYearController@updateTerm');
+
     });
 });
 
-Route::fallback(function(){  
+Route::fallback(function(){
     return response()->json(['message' => 'Not Found.'], 404);
 })->name('api.fallback.404');
 //Route::middleware('auth:api')->get('/user', function (Request $request) {

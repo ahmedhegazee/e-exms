@@ -16,9 +16,7 @@ class CreateStudyingTermsTable extends Migration
         Schema::create('studying_terms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('term');
-            $table->unsignedBigInteger('studying_year_id');
-            $table->foreign('studying_year_id')->references('id')->on('studying_years');
-            $table->timestamps();
+                      $table->timestamps();
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubjectsTable extends Migration
+class CreateStudentRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,19 @@ class CreateSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('student_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('subject_name');
-            $table->string('subject_code')->unique();
+
+            $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('level_id');
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('studying_term_id');
-            $table->integer('credit_hours');
-            $table->unsignedBigInteger('professor_id');
-            $table->foreign('professor_id')->on('professors')->references('id');
+            $table->unsignedBigInteger('studying_year_id');
+            $table->foreign('student_id')->on('students')->references('id');
+            $table->foreign('level_id')->on('levels')->references('id');
             $table->foreign('department_id')->on('departments')->references('id');
             $table->foreign('studying_term_id')->on('studying_terms')->references('id');
-            $table->foreign('level_id')->on('levels')->references('id');
-
+            $table->foreign('studying_year_id')->on('studying_years')->references('id');
             $table->timestamps();
         });
     }
@@ -38,6 +37,6 @@ class CreateSubjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('student_registrations');
     }
 }
