@@ -34,6 +34,8 @@ Route::group(['middleware'=>'localization'],function (){
         Route::post('/year/{year}/terms', 'API\StudyingYearController@addTerms');
         Route::get('/year/{year}/terms', 'API\StudyingYearController@getTerms');
         Route::patch('/year/{year}/term/{term}', 'API\StudyingYearController@updateTerm');
+        Route::get('/professors/subjects','API\SubjectsController@getProfessorSubjects');
+        Route::get('/students/subjects','API\SubjectsController@getStudentSubjects');
 
     });
 });

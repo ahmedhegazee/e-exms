@@ -30,4 +30,17 @@ class Subject extends Model
     {
         return $this->hasMany(Chapter::class);
     }
+
+    public function scopeCurrentTerm($query,$term)
+    {
+        return $query->where('studying_term_id',$term);
+    }
+    public function scopeLevel($query,$level)
+    {
+        return $query->where('level_id',$level);
+    }
+    public function scopeDepartment($query,$dept)
+    {
+        return $query->where('department_id',$dept);
+    }
 }

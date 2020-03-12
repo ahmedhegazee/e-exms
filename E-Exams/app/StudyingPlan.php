@@ -11,11 +11,11 @@ class StudyingPlan extends Model
 
     public function term()
     {
-        return $this->belongsTo(StudyingTerm::class);
+        return $this->belongsTo(StudyingTerm::class,'studying_term_id');
     }
     public function year()
     {
-        return $this->belongsTo(StudyingYear::class);
+        return $this->belongsTo(StudyingYear::class,'studying_year_id');
     }
 
     public function scopeCurrent($query)
