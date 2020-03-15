@@ -17,10 +17,10 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('question_content');
             $table->char('category')->default('A');
-//            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('question_type_id');
             $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('id')->on('chapters');
-//            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->foreign('question_type_id')->references('id')->on('question_types');
             $table->timestamps();
         });
     }

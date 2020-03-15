@@ -61,7 +61,7 @@ class SubjectsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Subject $subject
-     * @return \Illuminate\Http\JsonResponse
+     * @return SubjectResource|\Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Subject $subject)
     {
@@ -106,6 +106,7 @@ class SubjectsController extends Controller
             'subject_code' => 'required|string|regex:/^[A-Za-z0-9 ]+$/|unique:subjects|min:3|max:10',
             'level_id' => 'required|numeric',
             'department_id' => 'required|numeric',
+            'term' => 'required|numeric',
             'professor_id' => 'required|numeric',
             'credit_hours' => 'required|numeric|min:1|max:20|regex:/^[1-9]{1,2}$/'
         ];

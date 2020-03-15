@@ -2,6 +2,7 @@
 
 namespace App\Subject;
 
+use App\QuestionType;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
@@ -23,6 +24,10 @@ class Question extends Model
     public function chapter()
     {
         return $this->belongsTo(Chapter::class);
+    }
+    public function type()
+    {
+        return $this->belongsTo(QuestionType::class);
     }
 
     public function options()

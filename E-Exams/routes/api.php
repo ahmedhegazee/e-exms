@@ -28,6 +28,7 @@ Route::group(['middleware'=>'localization'],function (){
             '/term'=>'API\StudyingTermController',
             '/year'=>'API\StudyingYearController',
             '/professor'=>'API\ProfessorsController',
+            '/subject/{subject}/exam'=>'API\ExamsController',
         ]);
         Route::post('/level/{level}/dept', 'API\LevelsController@addDepartments');
         Route::get('/level/{level}/dept', 'API\LevelsController@getDepartments');

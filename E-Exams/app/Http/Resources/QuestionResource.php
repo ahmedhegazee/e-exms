@@ -16,15 +16,16 @@ class QuestionResource extends JsonResource
     {
         $options=[];
         $correctAnswer=0;
-        for($i=0;$i<sizeof($this->options->toArray);$i++){
+        for($i=0;$i<sizeof($this->options->toArray());$i++){
             $options['option '.($i+1)]=$this->options[$i]->option_content;
-           if($this->options[$i]->option_content->correct==1)
+           if($this->options[$i]->correct==1)
                $correctAnswer=$i;
         }
         $options['correct answer']=$this->getCorrectAnswer($correctAnswer);
         $question=[
             'question content'=>$this->question_content,
             'category'=>$this->category,
+            'question type'=>$this->type->type,
 
         ];
 
