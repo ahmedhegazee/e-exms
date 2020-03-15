@@ -124,7 +124,8 @@ class UserController extends Controller
         'level_id'=>$data->get('level_id'),
         'department_id'=>$data->get('level_id'),
          'studying_term_id'=>$currentTerm->id,
-         'studying_year_id'=>$currentYear->id
+         'studying_year_id'=>$currentYear->id,
+         'term'=>1,
      ]);
     }
     public function createProfessor($data,User $user)
