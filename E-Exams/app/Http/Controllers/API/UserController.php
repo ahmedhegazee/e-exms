@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Student\StudentRegistration;
+use App\StudyingPlan;
+use App\StudyingTerm;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +79,7 @@ class UserController extends Controller
         $rules=[
             'full_name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|regex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*#?&]{8,}$/|min:8',
+            'password' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*#?&]{8,}$/|min:8',
             'c_password' => 'required|same:password',
             'user_type'=>'required|numeric|regex:/^[1-2]{1}$/|' // 1 for student , 2 for professor
         ];
@@ -114,7 +117,15 @@ class UserController extends Controller
 
     public function createStudent($data,User $user)
     {
-     $user->student()->create($data) ;
+        $currentTerm=StudyingPlan::current(1)->get()->first()->term;
+        $currentYear=StudyingPlan::current(1)->get()->first()->year;
+     $student=$user->student()->create($data) ;
+     $student->registrations()->create([
+        'level_id'=>$data->get('level_id'),
+        'department_id'=>$data->get('level_id'),
+         'studying_term_id'=>$currentTerm->id,
+         'studying_year_id'=>$currentYear->id
+     ]);
     }
     public function createProfessor($data,User $user)
     {

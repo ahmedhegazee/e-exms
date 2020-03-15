@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExamStructuresTable extends Migration
+class CreateTrainingExamStructuresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateExamStructuresTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam_structures', function (Blueprint $table) {
+        Schema::create('training_exam_structures', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('exam_id');
+            $table->unsignedBigInteger('training_exam_id');
             $table->unsignedBigInteger('chapter_id');
             $table->unsignedBigInteger('question_type_id');
             $table->unsignedInteger('questions_count');
             $table->char('category');
             $table->foreign('chapter_id')->on('chapters')->references('id');
             $table->foreign('question_type_id')->on('question_types')->references('id');
-            $table->foreign('exam_id')->on('exams')->references('id');
+            $table->foreign('training_exam_id')->on('training_exams')->references('id');
 
             $table->timestamps();
         });
@@ -35,6 +35,6 @@ class CreateExamStructuresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exam_structures');
+        Schema::dropIfExists('training_exam_structures');
     }
 }

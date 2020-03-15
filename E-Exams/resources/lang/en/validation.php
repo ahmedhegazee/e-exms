@@ -194,8 +194,8 @@ return [
             'unique' => 'This is email is token ',
         ],
         'password' => [
-            'required' => 'The حشسسصخقيis required',
-            'string' => 'The حشسسصخقي must be string ',
+            'required' => 'The password is required',
+            'string' => 'The password must be string ',
             'regex'=>'password must be eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
             'min'=>'Password must be at least 8 characters'
         ],

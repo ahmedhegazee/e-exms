@@ -22,6 +22,7 @@ class SubjectResource extends JsonResource
             'department'=>$this->department->department_title,
             'credit_hours'=>$this->credit_hours,
             'professor'=>$this->professor->user->full_name,
+            'term'=>$this->term==0?'first term':'second term',
         ];
     }
 }

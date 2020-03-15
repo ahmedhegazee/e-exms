@@ -7,6 +7,7 @@ use App\Http\Resources\QuestionResource;
 use App\Subject\Chapter;
 use App\Subject\Question;
 use App\Subject\Subject;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -34,7 +35,7 @@ class QuestionsController extends Controller
      * @param Request $request
      * @param Subject $subject
      * @param Chapter $chapter
-     * @return \Illuminate\Http\JsonResponse
+     * @return QuestionResource|JsonResponse
      */
     public function store(Request $request,Subject $subject,Chapter $chapter)
     {
@@ -43,15 +44,12 @@ class QuestionsController extends Controller
             return response()->json(['success'=>false,'errors'=>$validator->errors()->all()]);
         }
 //        $check= auth()->user()->getProfessor()->subjects()->create($request->all());
-        $question=$chapter->questions()->create([
-            'question_content'=>$request->get('question_content'),
-            'category'=>$request->get('category'),
-        ]);
+        $question=$chapter->questions()->create($request->only('question_content','category','question_type_id'));
         collect($request->get('options'))->each(function($option) use ($question) {
             $question->options()->create(['option_content'=>$option]);
         });
         $correct=intval($request->get('correct'));
-        $question->options[$correct]->update(['correct'=>1]);
+        $question->options[$correct-1]->update(['correct'=>1]);
         return  new QuestionResource($question);
 //        $check
 //        return response()->json(['success'=>$check]);
@@ -100,6 +98,7 @@ class QuestionsController extends Controller
             'category'=>'required|string|regex:/^[A-C]{1}$/|min:1|max:1',
             'options.*'=>'required|string|min:5|max:200',
             'correct' => 'required|numeric',
+            'question_type_id' => 'required|numeric',
         ];
         $messages=[
             'question_content.required'=>'The question field is required',
