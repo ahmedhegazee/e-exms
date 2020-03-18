@@ -14,12 +14,11 @@ class DatabaseSeeder extends Seeder
     {
          Artisan::call('passport:install --force');
         $this->call(RolesTableSeeder::class);
-        $this->call(StudyingYearsTableSeeder::class);
-        $this->call(StudyingTermsTableSeeder::class);
-        $this->call(StudyingPlanTableSeeder::class);
         $this->call(DepartmentsTableSeeder::class);
         $this->call(LevelsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(QuestionTypesTableSeeder::class);
+        $this->call(SubjectsTableSeeder::class);
+
     }
 }

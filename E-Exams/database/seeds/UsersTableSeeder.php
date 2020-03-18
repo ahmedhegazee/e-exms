@@ -16,6 +16,7 @@ class UsersTableSeeder extends Seeder
             'full_name' => 'prof ahmed',
             'email' => 'prof_ahmed@email.com',
             'password' => bcrypt('password'),
+            'email_verified_at'=>date('Y-m-d g:i:s')
         ]);
         $prof->professor()->create([
             'department_id'=>2
@@ -26,18 +27,16 @@ class UsersTableSeeder extends Seeder
             'full_name' => 'ahmed hegazy',
             'email' => 'hegazy@email.com',
             'password' => bcrypt('password'),
+            'email_verified_at'=>date('Y-m-d g:i:s')
         ]);
         $user->roles()->attach(1);
         $student=$user->student()->create([
             'academic_id'=>'0123456789012345'
         ]);
-        $currentTerm=StudyingPlan::current(1)->get()->first()->term;
-        $currentYear=StudyingPlan::current(1)->get()->first()->year;
+
         $student->registrations()->create([
             'level_id'=>1,
             'department_id'=>1,
-            'studying_term_id'=>$currentTerm->id,
-            'studying_year_id'=>$currentYear->id,
             'term'=>1
         ]);
          $user->createToken('auth_token');
