@@ -125,20 +125,18 @@ class UserController extends Controller
 
     public function createStudent($data, User $user)
     {
-        $currentTerm = StudyingPlan::current(1)->get()->first()->term;
-        $currentYear = StudyingPlan::current(1)->get()->first()->year;
+        $user->roles()->attach(1);
         $student = $user->student()->create($data);
         $student->registrations()->create([
             'level_id' => $data->get('level_id'),
             'department_id' => $data->get('level_id'),
-            'studying_term_id' => $currentTerm->id,
-            'studying_year_id' => $currentYear->id,
             'term' => 1,
         ]);
     }
 
     public function createProfessor($data, User $user)
     {
+        $user->roles()->attach([2,3]);
         $user->professor()->create($data);
     }
 
