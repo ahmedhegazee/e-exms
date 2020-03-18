@@ -21,7 +21,7 @@ class CreateStudentRegistrationsTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('studying_term_id');
             $table->unsignedBigInteger('studying_year_id');
-            $table->unsignedInteger('term');//0for firs term, 1 for second term
+            $table->unsignedInteger('term');//1for firs term, 2 for second term
             $table->foreign('student_id')->on('students')->references('id');
             $table->foreign('level_id')->on('levels')->references('id');
             $table->foreign('department_id')->on('departments')->references('id');

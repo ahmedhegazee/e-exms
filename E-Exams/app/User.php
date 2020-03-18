@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Notifications\VerifyApiEmail;
 use App\Student\Student;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable ,HasApiTokens;
 
@@ -46,5 +47,14 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+    public function sendApiEmailVerificationNotification()
+    {
+        $this->notify(new VerifyApiEmail); // my notification
     }
 }

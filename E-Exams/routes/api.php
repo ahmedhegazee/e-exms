@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware'=>'localization'],function (){
     Route::post('login', 'API\UserController@login');
     Route::post('register', 'API\UserController@register');
+    Route::get('email/verify/{id}', 'VerificationApiController@verify')->name('verificationapi.verify');
+    Route::post('/password/create', 'PasswordResetController@create');
+    Route::get('/password/find/{token}', 'PasswordResetController@find');
+    Route::post('/password/reset', 'PasswordResetController@reset');
+Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
     Route::group(['middleware' => ['auth:api']], function(){
 //    Route::post('details', 'API\UserController@details');
         Route::apiResources([

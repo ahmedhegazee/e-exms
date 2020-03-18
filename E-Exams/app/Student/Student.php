@@ -4,6 +4,7 @@ namespace App\Student;
 
 use App\Department;
 use App\Level;
+use App\TrainingExam\TrainingExam;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,10 @@ class Student extends Model
     public function registrations()
     {
         return $this->hasMany(StudentRegistration::class);
+ }
+
+    public function trainingExams()
+    {
+        return $this->hasMany(TrainingExam::class);
  }
 }
