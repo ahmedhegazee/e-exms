@@ -1,29 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ExamResource;
 use App\Http\Resources\ExamStructureResource;
-use App\Subject\Exam;
 use App\Subject\Subject;
+use App\TrainingExam\TrainingExam;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
-class ExamsController extends Controller
+class TrainingExamsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param Subject $subject
-     * @return AnonymousResourceCollection
+     * @return \Illuminate\Http\Response
      */
-    public function index(Subject $subject)
+    public function index()
     {
-        return ExamResource::collection($subject->exams);
+        //
     }
 
     /**
@@ -31,16 +27,17 @@ class ExamsController extends Controller
      *
      * @param Request $request
      * @param Subject $subject
-     * @return JsonResponse|AnonymousResourceCollection
+     * @return JsonResponse|AnonymousResourceCollection|void
      */
-    public function store(Request $request, Subject $subject)
+    public function store(Request $request,Subject $subject)
     {
-
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
         }
-        $exam = $subject->exams()->create($request->only('start_time', 'end_time', 'exam_time', 'marks'));
+       $exam= auth()->user()->student->trainingExams()->create([
+            'subject_id'=>$subject->id,
+        ]);
         collect($request->get('chapters'))->each(function($structure) use ($exam) {
             $exam->structures()->create([
                 'chapter_id'=>$structure['id'],
@@ -48,30 +45,28 @@ class ExamsController extends Controller
                 'questions_count'=>$structure['count'],
             ]);
         });
-            return ExamStructureResource::collection($exam->structures);
+        return ExamStructureResource::collection($exam->structures);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Subject $subject
-     * @param Exam $exam
-     * @return AnonymousResourceCollection
+     * @param  \App\TrainingExam\TrainingExam  $trainingExam
+     * @return \Illuminate\Http\Response
      */
-    public function show(Subject $subject, Exam $exam)
+    public function show(TrainingExam $trainingExam)
     {
-        return ExamStructureResource::collection($exam->structures);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param Subject $subject
-     * @param Exam $exam
-     * @return void
+     * @param  \App\TrainingExam\TrainingExam  $trainingExam
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subject $subject, Exam $exam)
+    public function update(Request $request, TrainingExam $trainingExam)
     {
         //
     }
@@ -79,21 +74,16 @@ class ExamsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Exam $exam
-     * @return Response
+     * @param  \App\TrainingExam\TrainingExam  $trainingExam
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(Exam $exam)
+    public function destroy(TrainingExam $trainingExam)
     {
         //
     }
-
     public function validator($data)
     {
         $rules = [
-            'start_time' => 'required|date',
-            'end_time' => 'required|date',
-            'exam_time' => 'required|string|regex:/^[0][0-8][:][0-5][0-9]$/', //the time must be hh:mm
-            'marks' => 'required|numeric',
             'chapters.*.id'=>'required|numeric',
             'chapters.*.count'=>'required|numeric',
             'chapters.*.category'=>'required|string|regex:/^[A-C]{1}$/|min:1|max:1',

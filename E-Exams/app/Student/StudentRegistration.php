@@ -21,12 +21,6 @@ class StudentRegistration extends Model
     } public function department()
     {
         return $this->belongsTo(Department::class);
-    } public function term()
-    {
-        return $this->belongsTo(StudyingTerm::class);
-    } public function year()
-    {
-        return $this->belongsTo(StudyingYear::class);
     }
 
 }

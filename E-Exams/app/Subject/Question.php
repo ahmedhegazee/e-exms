@@ -35,4 +35,13 @@ class Question extends Model
         return $this->hasMany(QuestionOption::class);
     }
 
+    public function scopeMCQ($query)
+    {
+        return $query->where('question_type_id',1);
+    }
+    public function scopeTF($query)
+    {
+        return $query->where('question_type_id',2);
+    }
+
 }

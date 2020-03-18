@@ -16,9 +16,9 @@ class Subject extends Model
         return $this->belongsTo(Level::class);
     }
 
-    public function department()
+    public function departments()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsToMany(Department::class)->withTimestamps();
     }
 
     public function professor()
@@ -35,10 +35,7 @@ class Subject extends Model
         return $this->hasMany(Chapter::class);
     }
 
-    public function scopeCurrentTerm($query,$term)
-    {
-        return $query->where('studying_term_id',$term);
-    }
+
     public function scopeLevel($query,$level)
     {
         return $query->where('level_id',$level);

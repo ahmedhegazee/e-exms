@@ -1,10 +1,10 @@
 <?php
 
-namespace App\TrainingExam;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TrainingExamAnswers extends Model
+class PasswordReset extends Model
 {
     protected $guarded=[];
 }
