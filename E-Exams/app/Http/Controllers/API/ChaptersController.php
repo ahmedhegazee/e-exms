@@ -14,11 +14,12 @@ class ChaptersController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Subject $subject
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Subject $subject)
     {
-        return  ChapterResource::collection(Chapter::all());
+        return  ChapterResource::collection($subject->chapters);
     }
 
 

@@ -19,13 +19,32 @@ class QuestionsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @param Subject $subject
      * @param Chapter $chapter
-     * @return AnonymousResourceCollection
+     * @return JsonResponse|AnonymousResourceCollection
      */
-    public function index(Subject $subject,Chapter $chapter)
+    public function index(Request $request,Subject $subject,Chapter $chapter)
     {
-        return QuestionResource::collection($chapter->questions);
+        //type =>1 for MCQ , 2 for T|F
+        //category A, B, C
+        $validator=$this->validateFilters($request->all());
+        if($validator->fails())
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        if($request->has('category')&&$request->has('type')){
+            $type=intval($request->get('type'));
+            $category=intval($request->get('category'));
+            return QuestionResource::collection($chapter->questions()->questionType($type)->questionCategory($category)->paginate(20));
+        }
+        else if($request->has('type')){
+            $type=intval($request->get('type'));
+//            dd($chapter->questions()->questionType($type)->paginate(20));
+            return QuestionResource::collection($chapter->questions()->questionType($type)->paginate(20));
+        }
+        else{
+            return response()->json(['error'=>'please select type']);
+        }
+
     }
 
 
@@ -115,5 +134,15 @@ class QuestionsController extends Controller
             'options.*.max'=>'This option field must not longer than 200 characters',
         ];
         return Validator::make($data,$rules,$messages);
+    }
+
+    public function validateFilters($data)
+    {
+        $rules=[
+            'type'=>'sometimes|numeric|min:1|max:2',
+            'category'=>'sometimes|numeric|min:1|max:3',
+        ];
+
+        return Validator::make($data,$rules);
     }
 }
