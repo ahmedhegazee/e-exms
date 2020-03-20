@@ -16,7 +16,8 @@ class UsersTableSeeder extends Seeder
             'full_name' => 'prof ahmed',
             'email' => 'prof_ahmed@email.com',
             'password' => bcrypt('password'),
-            'email_verified_at'=>date('Y-m-d g:i:s')
+            'email_verified_at'=>date('Y-m-d g:i:s'),
+            'approved'=>1
         ]);
         $prof->professor()->create([
             'department_id'=>2
@@ -27,7 +28,8 @@ class UsersTableSeeder extends Seeder
             'full_name' => 'ahmed hegazy',
             'email' => 'hegazy@email.com',
             'password' => bcrypt('password'),
-            'email_verified_at'=>date('Y-m-d g:i:s')
+            'email_verified_at'=>date('Y-m-d g:i:s'),
+            'approved'=>1
         ]);
         $user->roles()->attach(1);
         $student=$user->student()->create([

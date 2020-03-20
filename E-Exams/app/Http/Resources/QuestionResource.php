@@ -21,10 +21,11 @@ class QuestionResource extends JsonResource
            if($this->options[$i]->correct==1)
                $correctAnswer=$i;
         }
-        $options['correct answer']=$this->getCorrectAnswer($correctAnswer);
+//        $options['correct answer']=$this->getCorrectAnswer($correctAnswer);
+        $options['correct answer']=$correctAnswer+1;
         $question=[
             'question content'=>$this->question_content,
-            'category'=>$this->category,
+            'category'=>$this->category->category,
             'question type'=>$this->type->type,
 
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Subject;
 
+use App\QuestionCategory;
 use App\QuestionType;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,7 +28,7 @@ class Question extends Model
     }
     public function type()
     {
-        return $this->belongsTo(QuestionType::class);
+        return $this->belongsTo(QuestionType::class,'question_type_id');
     }
 
     public function options()
@@ -35,13 +36,39 @@ class Question extends Model
         return $this->hasMany(QuestionOption::class);
     }
 
-    public function scopeMCQ($query)
+    public function category()
+    {
+        return $this->belongsTo(QuestionCategory::class,'question_category_id');
+}
+    public function scopeTypeMCQ($query)
     {
         return $query->where('question_type_id',1);
     }
-    public function scopeTF($query)
+    public function scopeQuestionType($query,$type)
+    {
+        return $query->where('question_type_id',$type);
+    }
+    public function scopeTypeTrueOrFalse($query)
     {
         return $query->where('question_type_id',2);
+    }
+
+    public function scopeQuestionCategory($query,$category)
+    {
+        return $query->where('question_category_id',$category);
+    }
+    public function scopeEasyQuestionCategory($query)
+    {
+        return $query->where('question_category_id',1);
+    }
+    //medium
+    public function scopeMediumQuestionCategory($query)
+    {
+        return $query->where('question_category_id',2);
+    }
+    public function scopeDifficultQuestionCategory($query)
+    {
+        return $query->where('question_category_id',3);
     }
 
 }

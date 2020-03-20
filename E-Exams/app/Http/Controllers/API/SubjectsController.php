@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentSubjectResource;
 use App\Http\Resources\SubjectResource;
 use App\Level;
 use App\StudyingPlan;
@@ -35,7 +36,7 @@ class SubjectsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return SubjectResource|\Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -86,17 +87,13 @@ class SubjectsController extends Controller
 
     public function getProfessorSubjects()
     {
-        $term =StudyingPlan::current(1)->first()->term->id;
-        return SubjectResource::collection(auth()->user()->professor->subjects()->currentTerm($term)->get());
+        return SubjectResource::collection(auth()->user()->professor->subjects);
     }
 
     public function getStudentSubjects()
     {
-//        $term =StudyingPlan::current(1)->first()->term->id;
-       $studentTerm= auth()->user()->student->registrations->last()->term->id;
-       $studentDepartment= auth()->user()->student->registrations->last()->department->id;
-       $studentLevel= auth()->user()->student->registrations->last()->level->id;
-        return SubjectResource::collection(Subject::currentTerm($studentTerm)->level($studentLevel)->department($studentDepartment));
+        $subjects=auth()->user()->student->getSubjects();
+        return StudentSubjectResource::collection($subjects);
     }
 
     public function validator($data)

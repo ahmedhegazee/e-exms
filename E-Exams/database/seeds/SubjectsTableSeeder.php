@@ -14,8 +14,8 @@ class SubjectsTableSeeder extends Seeder
     public function run()
     {
 //        factory(\App\Subject\Subject::class,100)->create();
-        $this->createGeneralSubjects(1,[1,5]);
-        $this->createGeneralSubjects(2,[1,5]);
+        $this->createGeneralSubjects(1,[1,6]);
+        $this->createGeneralSubjects(2,[1,6]);
         $this->createGeneralSubjects(3,[2,3,4,5]);
         $this->createGeneralSubjects(4,[2,3,4,5]);
 
@@ -49,6 +49,7 @@ class SubjectsTableSeeder extends Seeder
                     'credit_hours' => 3
                 ]);
                 $subject->departments()->attach($departments);
+
             }
         }
     }

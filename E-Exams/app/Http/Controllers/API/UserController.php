@@ -34,11 +34,14 @@ class UserController extends Controller
         } else if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
 
-            if ($user->email_verified_at !== NULL) {
+            if ($user->email_verified_at == NULL) {
+                return response()->json(['error' => 'Please Verify Email'], 401);
+
+            } else if ($user->approved == 0) {
+                return response()->json(['error' => 'You are not approved yet.'], 401);
+            } else {
                 $success['token'] = $user->createToken('MyApp')->accessToken;
                 return response()->json(['success' => $success], $this->successStatus);
-            } else {
-                return response()->json(['error' => 'Please Verify Email'], 401);
             }
 
         } else {
@@ -136,7 +139,7 @@ class UserController extends Controller
 
     public function createProfessor($data, User $user)
     {
-        $user->roles()->attach([2,3]);
+        $user->roles()->attach([2, 3]);
         $user->professor()->create($data);
     }
 

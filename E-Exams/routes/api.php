@@ -15,11 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group(['middleware'=>'localization'],function (){
-    Route::get('/levels','API\LevelsController@index');
-    Route::get('/level/{level}/dept', 'API\LevelsController@getDepartments');
-
     Route::post('login', 'API\UserController@login');
     Route::post('register', 'API\UserController@register');
+    Route::get('/levels','API\LevelsController@getLevels');
     Route::get('email/verify/{id}', 'VerificationApiController@verify')->name('verificationapi.verify');
     Route::post('/password/create', 'PasswordResetController@create');
     Route::get('/password/find/{token}', 'PasswordResetController@find');
@@ -33,16 +31,20 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
             '/subject/{subject}/chapter' => 'API\ChaptersController',
             '/subject/{subject}/chapter/{chapter}/question' => 'API\QuestionsController',
             '/dept' => 'API\DepartmentsController',
-            '/term'=>'API\StudyingTermController',
-            '/year'=>'API\StudyingYearController',
+//            '/term'=>'API\StudyingTermController',
+//            '/year'=>'API\StudyingYearController',
             '/professor'=>'API\ProfessorsController',
             '/subject/{subject}/exam'=>'API\ExamsController',
         ]);
         Route::post('/level/{level}/dept', 'API\LevelsController@addDepartments');
-        Route::get('/professors/subjects','API\SubjectsController@getProfessorSubjects');
-        Route::get('/students/subjects','API\SubjectsController@getStudentSubjects');
-    });
+        Route::get('/level/{level}/dept', 'API\LevelsController@getDepartments');
+//        Route::post('/year/{year}/terms', 'API\StudyingYearController@addTerms');
+//        Route::get('/year/{year}/terms', 'API\StudyingYearController@getTerms');
+//        Route::patch('/year/{year}/term/{term}', 'API\StudyingYearController@updateTerm');
+        Route::get('/subjects/professors','API\SubjectsController@getProfessorSubjects');
+        Route::get('/subjects/students','API\SubjectsController@getStudentSubjects');
 
+    });
 });
 
 Route::fallback(function(){

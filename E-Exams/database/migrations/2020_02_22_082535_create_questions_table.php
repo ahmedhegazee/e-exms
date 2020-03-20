@@ -16,11 +16,13 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('question_content');
-            $table->char('category')->default('A');
+//            $table->char('category')->default('A');
             $table->unsignedBigInteger('question_type_id');
+            $table->unsignedBigInteger('question_category_id');
             $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('id')->on('chapters');
             $table->foreign('question_type_id')->references('id')->on('question_types');
+            $table->foreign('question_category_id')->references('id')->on('question_categories');
             $table->timestamps();
         });
     }

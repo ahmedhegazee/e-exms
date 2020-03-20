@@ -40,8 +40,14 @@ class Subject extends Model
     {
         return $query->where('level_id',$level);
     }
+    public function scopeCurrentTerm($query,$term)
+    {
+        return $query->where('term',$term);
+    }
     public function scopeDepartment($query,$dept)
     {
         return $query->where('department_id',$dept);
     }
+
+
 }

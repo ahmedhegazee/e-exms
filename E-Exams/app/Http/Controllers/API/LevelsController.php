@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeptResource;
+use App\Http\Resources\LevelDeptResource;
 use App\Http\Resources\LevelResource;
 use App\Level;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\App;
@@ -35,8 +37,8 @@ class LevelsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return LevelResource
+     * @param Request $request
+     * @return LevelResource|JsonResponse
      */
     public function store(Request $request)
     {
@@ -67,9 +69,9 @@ class LevelsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Level $level
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(Request $request, Level $level)
     {
@@ -111,5 +113,10 @@ class LevelsController extends Controller
         $rules = ['level_title' => 'required|string|regex:/^[^!@#$%^&*~;?]+$/|min:5|max:200'];
 
         return Validator::make($data, $rules);
+    }
+
+    public function getLevels()
+    {
+        return LevelDeptResource::collection(Level::all());
     }
 }
