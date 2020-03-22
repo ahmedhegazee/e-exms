@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         $prof->professor()->create([
             'department_id'=>2
         ]);
-        $prof->createToken('auth_token');
+       echo 'prof \n'. $prof->createToken('auth_token').'\n';
         $prof->roles()->attach([2,3]);
         $user=\App\User::create([
             'full_name' => 'ahmed hegazy',
@@ -41,6 +41,6 @@ class UsersTableSeeder extends Seeder
             'department_id'=>1,
             'term'=>1
         ]);
-         $user->createToken('auth_token');
+        echo 'student \n'. $user->createToken('auth_token').'\n';
     }
 }

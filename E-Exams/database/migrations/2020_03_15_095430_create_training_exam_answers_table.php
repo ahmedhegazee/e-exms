@@ -18,7 +18,7 @@ class CreateTrainingExamAnswersTable extends Migration
             $table->unsignedBigInteger('training_exam_id');
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('question_option_id');
-
+            $table->unsignedInteger('correct')->default(0);
             $table->foreign('training_exam_id')->on('training_exams')->references('id');
             $table->foreign('question_id')->on('questions')->references('id');
             $table->foreign('question_option_id')->on('question_options')->references('id');

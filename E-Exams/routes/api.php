@@ -35,7 +35,11 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
 //            '/year'=>'API\StudyingYearController',
             '/professor'=>'API\ProfessorsController',
             '/subject/{subject}/exam'=>'API\ExamsController',
+            '/subject/{subject}/training'=>'API\TrainingExamsController',
         ]);
+
+        Route::post( '/training/{exam}/answers','API\TrainingExamsController@storeAnswers');
+
         Route::post('/level/{level}/dept', 'API\LevelsController@addDepartments');
         Route::get('/level/{level}/dept', 'API\LevelsController@getDepartments');
 //        Route::post('/year/{year}/terms', 'API\StudyingYearController@addTerms');

@@ -12,12 +12,13 @@ class CreateTrainingExamsTable extends Migration
      * @return void
      */
     public function up()
+
     {
         Schema::create('training_exams', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('subject_id');
-            $table->integer('examined')->default(0);
+//            $table->integer('examined')->default(0);
             $table->foreign('subject_id')->on('subjects')->references('id');
             $table->foreign('student_id')->on('students')->references('id');
 

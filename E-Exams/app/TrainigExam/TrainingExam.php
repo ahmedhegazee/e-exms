@@ -35,8 +35,12 @@ class TrainingExam extends Model
         return $this->hasMany(TrainingExamStructure::class);
     }
 
+    public function scopeSubject($query,$subject)
+    {
+        return $query->where('subject_id',$subject);
+}
     public function questions()
     {
-        return $this->belongsToMany(Question::class)->withTimestamps();
+        return $this->belongsToMany(Question::class,'training_exam_question')->withTimestamps();
     }
 }

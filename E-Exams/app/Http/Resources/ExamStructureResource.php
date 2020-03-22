@@ -17,7 +17,7 @@ class ExamStructureResource extends JsonResource
         return [
             'chapter'=>$this->chapter->chapter_title,
             'questions'=>$this->questions_count,
-            'category'=>$this->category,
+            'category'=>$this->questionCategory->category,
             'questions type'=>$this->questionType->type
         ];
     }
