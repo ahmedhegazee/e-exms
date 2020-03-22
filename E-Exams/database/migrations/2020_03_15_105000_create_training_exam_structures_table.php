@@ -19,10 +19,13 @@ class CreateTrainingExamStructuresTable extends Migration
             $table->unsignedBigInteger('chapter_id');
             $table->unsignedBigInteger('question_type_id');
             $table->unsignedInteger('questions_count');
-            $table->char('category');
+//            $table->char('category');
+            $table->unsignedBigInteger('question_category_id');
             $table->foreign('chapter_id')->on('chapters')->references('id');
             $table->foreign('question_type_id')->on('question_types')->references('id');
             $table->foreign('training_exam_id')->on('training_exams')->references('id');
+            $table->foreign('question_category_id')->references('id')->on('question_categories');
+
 
             $table->timestamps();
         });

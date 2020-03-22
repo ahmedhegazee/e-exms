@@ -10,6 +10,10 @@ class ExamStructure extends Model
 {
     protected $guarded=[];
 
+    public function questionCategory()
+    {
+        return $this->belongsTo(QuestionCategory::class);
+    }
     public function exam()
     {
         return $this->belongsTo(Exam::class);
