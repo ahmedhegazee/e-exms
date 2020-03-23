@@ -42,6 +42,7 @@ class TrainingExamsTableSeeder extends Seeder
                  'question_id' => $question->id,
                  'question_option_id' => $option->id,
                  'correct' => $option->correct,
+                 'option_index'=>$answer
              ]);
          });
          $percent =($sum /$exam->questions->count())*100;
@@ -50,7 +51,7 @@ class TrainingExamsTableSeeder extends Seeder
              'correct_answers' => $correctAnswers,
              'wrong_answers' => $wrongAnswers,
          ]);
-         sleep(60);
+//         sleep(30);
      }
     }
 

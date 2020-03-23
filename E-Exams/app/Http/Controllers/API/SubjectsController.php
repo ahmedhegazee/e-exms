@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\QuestionResource;
 use App\Http\Resources\StudentSubjectResource;
 use App\Http\Resources\SubjectResource;
+use App\Http\Resources\TrainingExamsAnswersResource;
 use App\Level;
 use App\StudyingPlan;
 use App\Subject\Subject;
+use App\TrainingExam\TrainingExamAnswers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -92,11 +95,38 @@ class SubjectsController extends Controller
 
     public function getStudentSubjects()
     {
-        $subjects=auth()->user()->student->getSubjects();
+        $subjects = auth()->user()->student->getSubjects();
         return StudentSubjectResource::collection($subjects);
     }
 
-    public function validator($data)
+    public function getWrongAnswers(Request $request, Subject $subject)
+    {
+        //type =>1 for MCQ , 2 for T|F
+        $validator = $this->validateFilters($request->all());
+        if ($validator->fails())
+            return response()->json(['errors' => $validator->errors()->all()]);
+        if ($request->has('type')) {
+            $type = intval($request->get('type'));
+            $page=$request->has('page')?intval($request->get('page')):1;
+            $perPage=20;
+            $index= ($page-1)*$perPage;
+//            dd($chapter->questions()->questionType($type)->paginate(20));
+            $examIds = auth()->user()->student->trainingExams()->subject($subject->id)->get()->pluck('id');
+            $answers = TrainingExamAnswers::whereIn('training_exam_id', $examIds)->where('correct', 0)->get()
+                ->filter(function($answer) use ($type) {
+                    if($answer->question->type->id==$type)
+                        return $answer;
+                });
+            $pages=intval(ceil($answers->count()/$perPage));
+            $answers=$answers->slice($index,$perPage);
+            if($answers->count()==0)
+                return response()->json(['error'=>'please wrote correct page number']);
+            return response()->json(['pages count'=>$pages,'answers'=>TrainingExamsAnswersResource::collection($answers)->jsonSerialize()]);
+        }
+    }
+
+    public
+    function validator($data)
     {
         $rules = [
             'subject_name' => 'required|string|regex:/^[A-Za-z0-9 ]+$/|min:5|max:200',
@@ -110,4 +140,15 @@ class SubjectsController extends Controller
 
         return Validator::make($data, $rules);
     }
+
+    public function validateFilters($data)
+    {
+        $rules = [
+            'type' => 'required|numeric|min:1|max:2',
+            'page'=>'sometimes|numeric'
+        ];
+
+        return Validator::make($data, $rules);
+    }
 }
+
