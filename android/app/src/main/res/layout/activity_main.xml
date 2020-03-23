@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@color/bg_color"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvregister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="138dp"
+        android:text="Register"
+        android:textColor="@color/green"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvregister"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_et"
+        android:ems="10"
+        android:hint="@string/ET_name"
+        android:inputType="textPersonName"
+        android:paddingStart="15dp"
+        android:paddingEnd="5dp"
+        android:textColorHint="@color/black" />
+
+    <EditText
+        android:id="@+id/etacadnum"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/etname"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_et"
+        android:ems="10"
+        android:hint="@string/ET_academic_number"
+        android:inputType="number"
+        android:textColorHint="@color/black"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <EditText
+        android:id="@+id/etemail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/etacadnum"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_et"
+        android:ems="10"
+        android:hint="@string/ET_email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/black"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <Spinner
+        android:id="@+id/spnlevels"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/etemail"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_et"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <Spinner
+        android:id="@+id/spndepts"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/spnlevels"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_et"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <EditText
+        android:id="@+id/etpass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/spndepts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:autofillHints=""
+        android:background="@drawable/radius_et"
+        android:ems="10"
+        android:hint="@string/ET_password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/black"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <EditText
+        android:id="@+id/etconfrimpass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/etpass"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:autofillHints=""
+        android:background="@drawable/radius_et"
+        android:ems="10"
+        android:hint="@string/ET_retype_password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/black"
+        android:paddingStart="15dp"
+        android:paddingEnd  ="5dp"/>
+
+    <Button
+        android:id="@+id/btnregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etconfrimpass"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/radius_btn"
+        android:ems="10"
+        android:text="@string/btn_register"
+        android:textColor="#fff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="130dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="55dp"
+        android:text="You have an account"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/btnloginnow"
+        android:layout_width="130dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/bg_color"
+        android:text="Login Now"
+        android:textAllCaps="false"
+        android:textColor="@color/green"
+        android:textSize="15sp" />
+
+
+</RelativeLayout>

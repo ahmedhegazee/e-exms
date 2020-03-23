@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="trquaz"    >#C5FFDA</color>
+    <color name="yellow"    >#FFEA6E</color>
+    <color name="green"     >#1AD371</color>
+    <color name="bg_color"  >#FCFCFC</color>
+    <color name="ET_color"  >#CCCCCC</color>
+    <color name="dark_red"  >#CC1D4B</color>
+    <color name="rose"      >#FF7171</color>
+    <color name="white_rose">#FFC2D5</color>
+    <color name="black">#000000</color>
+
+</resources>

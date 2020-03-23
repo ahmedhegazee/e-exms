@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">E-exam</string>
+    <string name="Invalid_name">Invalid Name</string>
+    <string name="Invalid_acadnum">Please Enter Correct Number</string>
+    <string name="Invalid_email">Enter a valid email</string>
+    <string name="Invalid_password">password should be 8 characters</string>
+    <string name="Invalid_confirm_password">password does not match</string>
+    <string name="Incorrect_level">please choose your level</string>
+    <string name="Incorrect_Dept">please choose your department</string>
+    <string name="tve_exam">e_exam</string>
+    <string name="ET_name">Name</string>
+    <string name="ET_academic_number">Academic Number</string>
+    <string name="ET_email">Email</string>
+    <string name="depts"> </string>
+    <string name="levels"> </string>
+    <string name="ET_password">password</string>
+    <string name="ET_retype_password">Retype password</string>
+    <string name="btn_register">Register</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="drawerOpen">drawerOpen</string>
+    <string name="drawerClose">drawerClose</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
+</resources>

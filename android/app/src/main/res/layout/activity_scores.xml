@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmed.e_exam.Scores">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@drawable/radius_bottom"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="360dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="85dp"
+            android:foregroundGravity="center_vertical"
+            android:src="@drawable/profile_pic" />
+
+        <TextView
+            android:id="@+id/profile_page"
+            android:layout_width="76dp"
+            android:layout_height="25dp"
+            android:layout_above="@+id/profile_pic"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="172dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="170dp"
+            android:layout_marginBottom="154dp"
+            android:gravity="center_horizontal"
+            android:text="Profile"
+            android:textColor="@color/bg_color"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/profile_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="237dp"
+            android:layout_marginEnd="43dp"
+            android:layout_marginBottom="95dp"
+            android:gravity="center"
+            android:text="user name"
+            android:textColor="@color/bg_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/profile_level"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="275dp"
+            android:layout_marginBottom="33dp"
+            android:gravity="center"
+            android:text="Scores"
+            android:textSize="20sp"
+            android:textColor="@color/bg_color"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/profile_dept"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="275dp"
+            android:layout_marginBottom="7dp"
+            android:gravity="center"
+            android:text="profile"
+            android:textColor="@color/bg_color" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30dp"
+            app:itemBackground="@color/bg_color"
+            app:itemIconTint="@drawable/selector"
+            app:itemRippleColor="@color/green"
+            app:itemTextColor="#999999"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_nav" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+</RelativeLayout>

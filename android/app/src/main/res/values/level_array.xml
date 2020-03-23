@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Levels">
+    <item> select your level </item>
+        <item> FIRST LEVEL   </item>
+        <item> SECOND LEVEL  </item>
+        <item> THIRD LEVEL   </item>
+        <item> FOURTH LEVEL  </item>
+    </string-array>
+
+    <string-array name="Departments">
+        <item> Select your department </item>
+        <item> GENERAL                </item>
+        <item> SOFTWARE ENGINEERING   </item>
+        <item> INFORMATION TECHNOLOGY </item>
+        <item> COMPUTER SCIENCE       </item>
+        <item> INFORMATION SYSTEM     </item>
+    </string-array>
+
+</resources>

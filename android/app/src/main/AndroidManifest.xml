@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ahmed.e_exam">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/profile_pic"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.ahmed.e_exam.Finalexam"></activity>
+        <activity android:name=".Helpandfeedback" />
+        <activity android:name=".Scores" />
+        <activity android:name=".Email" />
+        <activity android:name=".Password" />
+        <activity android:name=".Personal_info" />
+        <activity android:name=".Profile_data" />
+        <activity android:name=".Result_analysis" />
+        <activity android:name=".Training_exam" />
+        <activity android:name=".Question_bank" />
+        <activity android:name=".Profile" />
+        <activity android:name=".LoginPage" />
+        <activity android:name="com.ahmed.e_exam.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

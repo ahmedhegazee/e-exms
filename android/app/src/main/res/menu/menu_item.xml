@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/helpandfeedback"
+        android:title="Help and feedback"/>
+
+    <item
+        android:id="@+id/finalexam"
+        android:title="Final Exam"/>
+
+</menu>
