@@ -112,7 +112,7 @@ class SubjectsController extends Controller
             $index= ($page-1)*$perPage;
 //            dd($chapter->questions()->questionType($type)->paginate(20));
             $examIds = auth()->user()->student->trainingExams()->subject($subject->id)->get()->pluck('id');
-            $answers = TrainingExamAnswers::whereIn('training_exam_id', $examIds)->where('correct', 0)->get()
+            $answers = TrainingExamAnswers::exams($examIds)->wrongAnswers()->get()
                 ->filter(function($answer) use ($type) {
                     if($answer->question->type->id==$type)
                         return $answer;
