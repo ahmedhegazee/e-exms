@@ -158,7 +158,8 @@ class TrainingExamsController extends Controller
         $questions->each(function ($question) use ($exam, $answers, &$sum, &$mcq, &$true_false_questions) {
 //            $question = intval($question);
 //            $q = Question::find($question);
-            $option = $question->options[intval($answers[$question->id])];
+            $index=intval($answers[$question->id]);
+            $option = $question->options[$index];
             if ($option->correct) {
                 if ($question->type->id == 1)
                     $mcq['true']++;
@@ -171,6 +172,7 @@ class TrainingExamsController extends Controller
                 'question_id' => $question->id,
                 'question_option_id' => $option->id,
                 'correct' => $option->correct,
+                'option_index'=>$index,
             ]);
 
         });

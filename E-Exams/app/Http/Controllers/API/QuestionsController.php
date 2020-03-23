@@ -63,12 +63,12 @@ class QuestionsController extends Controller
             return response()->json(['success'=>false,'errors'=>$validator->errors()->all()]);
         }
 //        $check= auth()->user()->getProfessor()->subjects()->create($request->all());
-        $question=$chapter->questions()->create($request->only('question_content','category','question_type_id'));
+        $question=$chapter->questions()->create($request->only('question_content','category','question_type_id','correct_answer'));
         collect($request->get('options'))->each(function($option) use ($question) {
             $question->options()->create(['option_content'=>$option]);
         });
         $correct=intval($request->get('correct'));
-        $question->options[$correct-1]->update(['correct'=>1]);
+        $question->options[$correct]->update(['correct'=>1]);
         return  new QuestionResource($question);
 //        $check
 //        return response()->json(['success'=>$check]);
@@ -116,7 +116,7 @@ class QuestionsController extends Controller
             'question_content'=>'required|string|min:5|max:200',
             'category'=>'required|string|regex:/^[A-C]{1}$/|min:1|max:1',
             'options.*'=>'required|string|min:5|max:200',
-            'correct' => 'required|numeric',
+            'correct_answer' => 'required|numeric|min:0|max:3',
             'question_type_id' => 'required|numeric',
         ];
         $messages=[

@@ -40,7 +40,7 @@ class UserController extends Controller
             } else if ($user->approved == 0) {
                 return response()->json(['error' => 'You are not approved yet.'], 401);
             } else {
-                $success['token'] = $user->createToken('MyApp')->accessToken;
+                $success['token'] = $user->createToken('auth_token')->accessToken;
                 return response()->json(['success' => $success], $this->successStatus);
             }
 

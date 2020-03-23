@@ -47,7 +47,7 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
 //        Route::patch('/year/{year}/term/{term}', 'API\StudyingYearController@updateTerm');
         Route::get('/subjects/professors','API\SubjectsController@getProfessorSubjects');
         Route::get('/subjects/students','API\SubjectsController@getStudentSubjects');
-
+        Route::get('/subject/{subject}/wrong-answers','API\SubjectsController@getWrongAnswers');
     });
 });
 

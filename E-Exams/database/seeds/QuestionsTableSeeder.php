@@ -18,22 +18,26 @@ class QuestionsTableSeeder extends Seeder
                     for($category=1;$category<4;$category++){
                         for ($q=1;$q<4;$q++){
                             //MCQ
+                            $index=rand(0,3);
                             $question=$chapter->questions()->create([
                                 'question_content'=>'Question '.$q,
                                 'question_category_id'=>$category,
-                                'question_type_id'=>1//MCQ
+                                'question_type_id'=>1,//MCQ
+                                'correct_answer'=>$index
                             ]);
                             for($option=1;$option<5;$option++){
                                 $question->options()->create([
                                     'option_content'=>'Option '.$option,
                                 ]);
                             }
-                            $question->options[rand(0,3)]->update(['correct'=>1]);
+                            $question->options[$index]->update(['correct'=>1]);
+                            $index=rand(0,1);
                                     //T/F
                             $question=$chapter->questions()->create([
                                 'question_content'=>'Question '.$q,
                                 'question_category_id'=>$category,
-                                'question_type_id'=>2//T|f
+                                'question_type_id'=>2,//T|f,
+                                'correct_answer'=>$index,
                             ]);
 
                             $question->options()->create([
@@ -43,7 +47,7 @@ class QuestionsTableSeeder extends Seeder
                                 'option_content'=>'False',
                             ]);
 
-                            $question->options[rand(0,1)]->update(['correct'=>1]);
+                            $question->options[$index]->update(['correct'=>1]);
                         }
 
                     }
