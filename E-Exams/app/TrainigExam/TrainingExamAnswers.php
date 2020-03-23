@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrainingExamAnswers extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function question()
     {
@@ -16,7 +16,16 @@ class TrainingExamAnswers extends Model
 
     public function exam()
     {
-        return $this->belongsTo(TrainingExam::class,'training_exam_id');
+        return $this->belongsTo(TrainingExam::class, 'training_exam_id');
     }
 
+    public function scopeExams($query, $exams)
+    {
+        return $query->whereIn('training_exam_id', $exams);
+    }
+
+    public function scopeWrongAnswers($query)
+    {
+        return $query->where('correct', 0);
+    }
 }
