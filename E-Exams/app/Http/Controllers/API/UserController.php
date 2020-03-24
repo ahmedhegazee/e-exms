@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\ImageUtility;
 use App\Jobs\SendVerificationEmailJob;
 use App\Student\StudentRegistration;
 use App\StudyingPlan;
@@ -11,6 +12,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -41,6 +44,9 @@ class UserController extends Controller
                 return response()->json(['error' => 'You are not approved yet.'], 401);
             } else {
                 $success['token'] = $user->createToken('auth_token')->accessToken;
+                $success['full_name']=$user->full_name;
+                $success['thumbnail_image']=$user->profile_image;
+                $success['profile_image']=$user->thumbnail_image;
                 return response()->json(['success' => $success], $this->successStatus);
             }
 
@@ -152,6 +158,32 @@ class UserController extends Controller
         $success['full_name'] = $user->full_name;
         return $success;
     }
+
+    /**
+     * @param Request $request
+     */
+    public function updateImage(Request $request)
+    {
+        $validator = Validator::make($request->all(),['image'=>'required|file|image|max:2048']);
+        $originalImage= $request->file('image');
+        if(auth()->user()->original_image!==ImageUtility::defaultOriginalImage)
+            ImageUtility::deleteImage(auth()->user()->original_image);
+        if(auth()->user()->profile_image!==ImageUtility::defaultProfileImage)
+            ImageUtility::deleteImage(auth()->user()->profile_image);
+        if(auth()->user()->thumbnail_image!==ImageUtility::defaultThumbnailImage)
+            ImageUtility::deleteImage(auth()->user()->thumbnail_image);
+        $thumbStr=ImageUtility::storeImage($originalImage,'/storage/images/thumbnail/',15,15);
+        $profileStr=ImageUtility::storeImage($originalImage,'/storage/images/profile/',64,64);
+        $originalStr="/storage/".$originalImage->store('images/original','public');
+        auth()->user()->update([
+            'thumbnail_image'=>$thumbStr,
+            'profile_image'=>$profileStr,
+            'original_image'=>$originalStr,
+        ]);
+    }
+
+
+
 //    /**
 //     * details api
 //     *

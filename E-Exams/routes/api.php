@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,8 @@ Route::group(['middleware'=>'localization'],function (){
     Route::post('/password/reset', 'PasswordResetController@reset');
 Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
     Route::group(['middleware' => ['auth:api']], function(){
+        Route::post('/update-image', 'API\UserController@updateImage');
+
 //    Route::post('details', 'API\UserController@details');
         Route::apiResources([
             '/level' => 'API\LevelsController',
@@ -50,7 +54,6 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
         Route::get('/subject/{subject}/wrong-answers','API\SubjectsController@getWrongAnswers');
     });
 });
-
 Route::fallback(function(){
     return response()->json(['message' => 'Not Found.'], 404);
 })->name('api.fallback.404');
