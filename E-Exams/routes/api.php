@@ -26,7 +26,7 @@ Route::group(['middleware'=>'localization'],function (){
     Route::post('/password/reset', 'PasswordResetController@reset');
 Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
     Route::group(['middleware' => ['auth:api']], function(){
-        Route::post('/update-image', 'API\UserController@updateImage');
+        Route::post('/user/update', [\App\Http\Controllers\API\UserController::class,'update']);
 
 //    Route::post('details', 'API\UserController@details');
         Route::apiResources([

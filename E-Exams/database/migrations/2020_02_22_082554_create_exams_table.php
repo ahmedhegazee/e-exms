@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->dateTime('end_time');
             $table->string('exam_time');//h:m
             $table->unsignedInteger('marks');
+            $table->string('exam_code');
             $table->integer('examined')->default(0);
             $table->foreign('subject_id')->on('subjects')->references('id');
 
