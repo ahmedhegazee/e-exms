@@ -38,15 +38,17 @@ class SubjectsTableSeeder extends Seeder
 
     public function createGeneralSubjects($level,$departments)
     {
+        $dept= ['SWE','CS','IT','IS'];
         for($j=1;$j<3;$j++){
             for($i=1;$i<6;$i++){
+                $index= rand(0,3);
                 $subject=Subject::create([
                     'subject_name' => 'Subject ' .$i ,
-                    'subject_code' => 'CS'.(rand(1,1000)*$i*$j*$level),
+                    'subject_code' => $dept[$index].(rand(100,1000)*$i*$j*$level),
                     'level_id' => $level,
                     'term' => $j,
                     'professor_id' => 1,
-                    'credit_hours' => 3
+//                    'credit_hours' => 3
                 ]);
                 $subject->departments()->attach($departments);
 

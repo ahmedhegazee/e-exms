@@ -33,6 +33,7 @@ class ImageUtility
     }
     public static function deleteImage($image)
     {
+//        dd($image);
         $imageDirectory = public_path( $image);
         if (file_exists($imageDirectory))
             unlink($imageDirectory);

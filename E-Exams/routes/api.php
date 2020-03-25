@@ -54,6 +54,12 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
         Route::get('/subject/{subject}/wrong-answers','API\SubjectsController@getWrongAnswers');
     });
 });
+Route::get('/user-images',function(){
+    dd(auth()->user());
+});
+Route::get('/generate-code',function (){
+   $randomCode=Str::random(5).rand(100,999);
+});
 Route::fallback(function(){
     return response()->json(['message' => 'Not Found.'], 404);
 })->name('api.fallback.404');

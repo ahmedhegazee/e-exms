@@ -7,6 +7,7 @@ use App\ImageUtility;
 use App\Jobs\SendVerificationEmailJob;
 use App\Student\StudentRegistration;
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -165,6 +166,7 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'image' => 'sometimes|file|image|max:2048',
             'new_password' => 'sometimes|string|min:8',
@@ -174,8 +176,12 @@ class UserController extends Controller
         ]);
         if ($validator->fails())
             return response()->json(['errors' => $validator->errors()]);
-        if ($request->has('image'))
-            $this->updateImage($request->file('image'));
+        if ($request->has('image')){
+
+            $images=$this->updateImage($request->file('image'));
+            return response()->json(array_merge(['success'=>true],$images));
+        }
+
         if ($request->has('current_password')
             && $request->has('new_password')) {
             $currentPassword=$request->get('current_password');
@@ -207,6 +213,7 @@ class UserController extends Controller
 
     public function updateImage($image)
     {
+//        dd(auth()->user()->original_image !== ImageUtility::defaultOriginalImage);
         if (auth()->user()->original_image !== ImageUtility::defaultOriginalImage)
             ImageUtility::deleteImage(auth()->user()->original_image);
         if (auth()->user()->profile_image !== ImageUtility::defaultProfileImage)
@@ -216,11 +223,19 @@ class UserController extends Controller
         $thumbStr = ImageUtility::storeImage($image, '/storage/images/thumbnail/', 15, 15);
         $profileStr = ImageUtility::storeImage($image, '/storage/images/profile/', 64, 64);
         $originalStr = "/storage/" . $image->store('images/original', 'public');
-        auth()->user()->update([
-            'thumbnail_image' => $thumbStr,
-            'profile_image' => $profileStr,
-            'original_image' => $originalStr,
-        ]);
+        $user=Auth::user();
+        $user->thumbnail_image=$thumbStr;
+        $user->profile_image=$profileStr;
+        $user->original_image=$originalStr;
+        $user->save();
+//        $user->update([
+//            'thumbnail_image' => $thumbStr,
+//            'profile_image' => $profileStr,
+//            'original_image' => $originalStr,
+//        ]);
+//        dd(auth()->user());
+       return ['thumb_image'=>$thumbStr,'profile_image'=>$profileStr];
+
     }
 
 //    /**

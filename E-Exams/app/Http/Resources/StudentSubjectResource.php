@@ -33,7 +33,7 @@ class StudentSubjectResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->subject_name,
             'code'=>$this->subject_code,
-            'credit_hours'=>$this->credit_hours,
+//            'credit_hours'=>$this->credit_hours,
             'professor'=>$this->professor->user->full_name,
             'questions'=>$this->chapters->map(function ($chapter){
                 return $chapter->questions->count();

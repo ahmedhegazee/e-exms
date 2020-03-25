@@ -43,4 +43,11 @@ class TrainingExam extends Model
     {
         return $this->belongsToMany(Question::class,'training_exam_question')->withTimestamps();
     }
+
+    public function scopeNotSolved($query,$student)
+    {
+        return $query->where('examined',0)->where('student_id',$student);
+    }
+
+
 }
