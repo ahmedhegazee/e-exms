@@ -26,7 +26,7 @@ Route::group(['middleware'=>'localization'],function (){
     Route::post('/password/reset', 'PasswordResetController@reset');
 Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
     Route::group(['middleware' => ['auth:api']], function(){
-        Route::post('/update-image', 'API\UserController@updateImage');
+        Route::post('/user/update', [\App\Http\Controllers\API\UserController::class,'update']);
 
 //    Route::post('details', 'API\UserController@details');
         Route::apiResources([
@@ -52,11 +52,43 @@ Route::get('email/resend', 'VerificationApiController@resend')->name('verificati
         Route::get('/subjects/professors','API\SubjectsController@getProfessorSubjects');
         Route::get('/subjects/students','API\SubjectsController@getStudentSubjects');
         Route::get('/subject/{subject}/wrong-answers','API\SubjectsController@getWrongAnswers');
+        Route::get('/subject/{subject}/results',[\App\Http\Controllers\API\SubjectsController::class,'getSubjectExamsResults']);//for student
+
+        Route::get('/subject/{subject}/exam/{exam}/analysis',[\App\Http\Controllers\API\ExamsController::class,'getAnalysisOfStudentAnswers']);//for professor
+        Route::get('/subject/{subject}/exam/{exam}/students-result',[\App\Http\Controllers\API\ExamsController::class,'getStudentResults']);//for professor
+        //#region student exams
+        Route::get('/exam/start',[\App\Http\Controllers\StudentExamsController::class,'show']);
+        Route::post('/exam/{exam}/solve',[\App\Http\Controllers\StudentExamsController::class,'storingAnswers']);
+        //#endregion
+
+
+        Route::get('/try-exam',function(){
+           $dateTime= explode(' ',auth()->user()->created_at);
+//           dd($dateTime);
+//           dd($date);
+           $time=explode(':',$dateTime[1]);
+//           dd($time);
+
+            $date=explode('-',$dateTime[0]);
+            $d = new DateTime();
+//            $d->setDate(intval($date[0]),intval($date[1]),intval($date[2]));
+//            $d->setTime(intval($time[0]),intval($time[1]),intval($time[2]));
+            $d->setTime(16,0,0);
+            $d->setDate(2020,3,31);
+            $diff=\Carbon\Carbon::now();
+//            dd($diff);
+//            dd($diff->diffInDays($d));
+//            dd($diff->diffInHours($d));
+//            dd($diff->diffInMinutes($d));
+        });
     });
 });
+
+Route::post('/exam/{exam}/generate-code','ExamsController@generateCode');
 Route::fallback(function(){
     return response()->json(['message' => 'Not Found.'], 404);
 })->name('api.fallback.404');
+
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

@@ -46,6 +46,7 @@ class TrainingExamsTableSeeder extends Seeder
              ]);
          });
          $percent =($sum /$exam->questions->count())*100;
+         $exam->update(['examined'=>1]);
          $exam->result()->create([
              'marks' => $percent,
              'correct_answers' => $correctAnswers,

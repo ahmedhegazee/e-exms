@@ -20,6 +20,8 @@ class CreateExamsTable extends Migration
             $table->dateTime('end_time');
             $table->string('exam_time');//h:m
             $table->unsignedInteger('marks');
+            $table->unsignedInteger('exam_type');//1 for midterm , 2 for quiz , 3 for final
+            $table->string('exam_code')->nullable();
             $table->integer('examined')->default(0);
             $table->foreign('subject_id')->on('subjects')->references('id');
 

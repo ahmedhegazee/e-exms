@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Department;
 use App\Http\Controllers\Controller;
 use App\ImageUtility;
 use App\Jobs\SendVerificationEmailJob;
+use App\Level;
 use App\Student\StudentRegistration;
-use App\StudyingPlan;
-use App\StudyingTerm;
 use App\User;
+use http\Env\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
@@ -23,7 +27,7 @@ class UserController extends Controller
      * login api
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function login(Request $request)
     {
@@ -44,9 +48,9 @@ class UserController extends Controller
                 return response()->json(['error' => 'You are not approved yet.'], 401);
             } else {
                 $success['token'] = $user->createToken('auth_token')->accessToken;
-                $success['full_name']=$user->full_name;
-                $success['thumbnail_image']=$user->profile_image;
-                $success['profile_image']=$user->thumbnail_image;
+                $success['full_name'] = $user->full_name;
+                $success['thumbnail_image'] = $user->profile_image;
+                $success['profile_image'] = $user->thumbnail_image;
                 return response()->json(['success' => $success], $this->successStatus);
             }
 
@@ -59,7 +63,7 @@ class UserController extends Controller
      * Register api
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function register(Request $request)
     {
@@ -105,8 +109,8 @@ class UserController extends Controller
     {
         $rules = [
             'academic_id' => 'required|string|regex:/^[0-9]{16}$/|unique:students',
-            'level_id' => 'required|numeric',
-            'department_id' => 'required|numeric',
+            'level_id' => ['required','numeric',Rule::in(Level::all()->pluck('id')->toArray())],
+            'department_id' => ['required','numeric',Rule::in(Department::all()->pluck('id')->toArray())],
         ];
 
         return Validator::make($data, $rules);
@@ -137,8 +141,8 @@ class UserController extends Controller
         $user->roles()->attach(1);
         $student = $user->student()->create($data);
         $student->registrations()->create([
-            'level_id' => $data->get('level_id'),
-            'department_id' => $data->get('level_id'),
+            'level_id' => $data['level_id'],
+            'department_id' => $data['level_id'],
             'term' => 1,
         ]);
     }
@@ -154,35 +158,88 @@ class UserController extends Controller
 //        $user->sendApiEmailVerificationNotification();
         SendVerificationEmailJob::dispatch($user)->delay(now()->addMinutes(3));
         $success['message'] = 'Please confirm yourself by clicking on verify user button sent to you on your email';
-        $success['token'] = $user->createToken('auth_token')->accessToken;
+//        $success['token'] = $user->createToken('auth_token')->accessToken;
         $success['full_name'] = $user->full_name;
         return $success;
     }
 
     /**
      * @param Request $request
+     * @return JsonResponse
      */
-    public function updateImage(Request $request)
+    public function update(Request $request)
     {
-        $validator = Validator::make($request->all(),['image'=>'required|file|image|max:2048']);
-        $originalImage= $request->file('image');
-        if(auth()->user()->original_image!==ImageUtility::defaultOriginalImage)
-            ImageUtility::deleteImage(auth()->user()->original_image);
-        if(auth()->user()->profile_image!==ImageUtility::defaultProfileImage)
-            ImageUtility::deleteImage(auth()->user()->profile_image);
-        if(auth()->user()->thumbnail_image!==ImageUtility::defaultThumbnailImage)
-            ImageUtility::deleteImage(auth()->user()->thumbnail_image);
-        $thumbStr=ImageUtility::storeImage($originalImage,'/storage/images/thumbnail/',15,15);
-        $profileStr=ImageUtility::storeImage($originalImage,'/storage/images/profile/',64,64);
-        $originalStr="/storage/".$originalImage->store('images/original','public');
-        auth()->user()->update([
-            'thumbnail_image'=>$thumbStr,
-            'profile_image'=>$profileStr,
-            'original_image'=>$originalStr,
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'sometimes|file|image|max:2048',
+            'new_password' => 'sometimes|string|min:8',
+            'current_password' => 'sometimes|string|min:8',
+            'email' => 'sometimes|email|unique:users',
+            'current_email' => 'sometimes|email',
         ]);
+        if ($validator->fails())
+            return response()->json(['errors' => $validator->errors()]);
+        if ($request->has('image')){
+
+            $images=$this->updateImage($request->file('image'));
+            return response()->json(array_merge(['success'=>true],$images));
+        }
+
+        if ($request->has('current_password')
+            && $request->has('new_password')) {
+            $currentPassword=$request->get('current_password');
+            $newPassword=$request->get('new_password');
+            if(Hash::check($currentPassword,auth()->user()->password))
+            {
+                auth()->user()->update(['password'=>bcrypt($newPassword)]);
+                return response()->json(['success'=>'password is updated successfully']);
+            }
+            else
+                return response()->json(['error'=>'write current password correctly']);
+        }
+        if ($request->has('current_email')
+            && $request->has('email')) {
+            $currentEmail=$request->get('current_email');
+            $newEmail=$request->get('email');
+            if(auth()->user()->email==$currentEmail)
+            {
+                auth()->user()->update(['email'=>$newEmail]);
+                return response()->json(['success'=>'email is updated successfully']);
+            }
+            else
+                return response()->json(['error'=>'write current email correctly']);
+        }
+        else{
+            return \response()->json(['error'=>'please enter password or email or upload profile image.']);
+        }
     }
 
+    public function updateImage($image)
+    {
+//        dd(auth()->user()->original_image !== ImageUtility::defaultOriginalImage);
+        if (auth()->user()->original_image !== ImageUtility::defaultOriginalImage)
+            ImageUtility::deleteImage(auth()->user()->original_image);
+        if (auth()->user()->profile_image !== ImageUtility::defaultProfileImage)
+            ImageUtility::deleteImage(auth()->user()->profile_image);
+        if (auth()->user()->thumbnail_image !== ImageUtility::defaultThumbnailImage)
+            ImageUtility::deleteImage(auth()->user()->thumbnail_image);
+        $thumbStr = ImageUtility::storeImage($image, '/storage/images/thumbnail/', 15, 15);
+        $profileStr = ImageUtility::storeImage($image, '/storage/images/profile/', 64, 64);
+        $originalStr = "/storage/" . $image->store('images/original', 'public');
+        $user=Auth::user();
+        $user->thumbnail_image=$thumbStr;
+        $user->profile_image=$profileStr;
+        $user->original_image=$originalStr;
+        $user->save();
+//        $user->update([
+//            'thumbnail_image' => $thumbStr,
+//            'profile_image' => $profileStr,
+//            'original_image' => $originalStr,
+//        ]);
+//        dd(auth()->user());
+       return ['thumb_image'=>$thumbStr,'profile_image'=>$profileStr];
 
+    }
 
 //    /**
 //     * details api

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStudentAnswersTable extends Migration
+class CreatesExamQuestionPivot extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateStudentAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_answers', function (Blueprint $table) {
+        Schema::create('exam_question', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('exam_id');
-            $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('option_id');
-            $table->integer('correct');
+            $table->foreign('exam_id')->on('exams')->references('id');
+            $table->foreign('question_id')->on('questions')->references('id');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateStudentAnswersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_answers');
+        Schema::dropIfExists('exam_question');
     }
 }
