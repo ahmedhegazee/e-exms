@@ -20,6 +20,7 @@ class ExamResource extends JsonResource
             'start_time'=>$this->start_time,
             'end_time'=>$this->end_time,
             'exam_time'=>$this->exam_time,
+            'is_examined'=>$this->examined==1?'Examined':'Not Examined',
             'marks'=>$this->marks,
         ];
     }

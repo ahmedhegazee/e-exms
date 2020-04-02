@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Department;
 use App\Http\Controllers\Controller;
 use App\ImageUtility;
 use App\Jobs\SendVerificationEmailJob;
+use App\Level;
 use App\Student\StudentRegistration;
 use App\User;
 use http\Env\Response;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
@@ -106,8 +109,8 @@ class UserController extends Controller
     {
         $rules = [
             'academic_id' => 'required|string|regex:/^[0-9]{16}$/|unique:students',
-            'level_id' => 'required|numeric', // TODO: Use Rule::in([])
-            'department_id' => 'required|numeric',
+            'level_id' => ['required','numeric',Rule::in(Level::all()->pluck('id')->toArray())],
+            'department_id' => ['required','numeric',Rule::in(Department::all()->pluck('id')->toArray())],
         ];
 
         return Validator::make($data, $rules);
@@ -138,8 +141,8 @@ class UserController extends Controller
         $user->roles()->attach(1);
         $student = $user->student()->create($data);
         $student->registrations()->create([
-            'level_id' => $data->get('level_id'),
-            'department_id' => $data->get('level_id'),
+            'level_id' => $data['level_id'],
+            'department_id' => $data['level_id'],
             'term' => 1,
         ]);
     }
@@ -155,7 +158,7 @@ class UserController extends Controller
 //        $user->sendApiEmailVerificationNotification();
         SendVerificationEmailJob::dispatch($user)->delay(now()->addMinutes(3));
         $success['message'] = 'Please confirm yourself by clicking on verify user button sent to you on your email';
-        $success['token'] = $user->createToken('auth_token')->accessToken;
+//        $success['token'] = $user->createToken('auth_token')->accessToken;
         $success['full_name'] = $user->full_name;
         return $success;
     }

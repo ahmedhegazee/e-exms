@@ -19,6 +19,7 @@ class CreateExamResultsTable extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('exam_id');
             $table->integer('marks');
+            $table->float('percent');
             $table->integer('success');
             $table->foreign('student_id')->on('students')->references('id');
             $table->foreign('subject_id')->on('subjects')->references('id');

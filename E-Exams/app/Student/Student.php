@@ -3,7 +3,10 @@
 namespace App\Student;
 
 use App\Department;
+use App\ExamAnswer;
+use App\ExamAttempt;
 use App\Level;
+use App\Subject\ExamResult;
 use App\Subject\Subject;
 use App\TrainingExam\TrainingExam;
 use App\User;
@@ -27,6 +30,21 @@ class Student extends Model
     {
         return $this->hasMany(TrainingExam::class);
     }
+
+    public function examResults()
+    {
+        return $this->hasMany(ExamResult::class);
+    }
+
+    public function examAnswers()
+    {
+        return $this->hasMany(ExamAnswer::class);
+}
+
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
+}
 
     public function getSubjects()
     {

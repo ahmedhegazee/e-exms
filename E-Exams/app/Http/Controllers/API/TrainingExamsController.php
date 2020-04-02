@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExamQuestionsResource;
 use App\Http\Resources\ExamStructureResource;
 use App\Http\Resources\TrainingExamsResultResource;
+use App\Subject\Exam;
 use App\Subject\Question;
 use App\Subject\Subject;
 use App\TrainingExam\TrainingExam;
@@ -130,7 +131,7 @@ class TrainingExamsController extends Controller
         if (collect($answers)->keys()->diff($exam->questions->pluck('id'))->count() > 0)
             return response()->json(['error' => 'please answer all this exam questions correctly']);
 
-        $result = $this->correctingAnswers($exam, $answers, $exam->questions);
+        $result = Exam::correctingAnswers($exam, $answers, $exam->questions,true);
 
         $examsResults = $this->getLastFiveResults($exam->subject, $exam);
         return response()->json(array_merge($result, ['last_results' => $examsResults]));
@@ -140,7 +141,7 @@ class TrainingExamsController extends Controller
     public function validateAnswers($data)
     {
         $rules = [
-            'questions.*' => 'required|numeric',
+            'answers'=>'required|array',
             'answers.*' => 'required|numeric',
         ];
         return Validator::make($data, $rules);
@@ -157,87 +158,7 @@ class TrainingExamsController extends Controller
         return Validator::make($data, $rules);
     }
 
-    /**
-     * @param $exam
-     * @param $answers
-     * @param $questions
-     * @return array
-     */
-    public function correctingAnswers($exam, $answers, $questions)
-    {
-        $sum = 0;
-        $mcq = ["true" => 0, 'false' => 0, 'total' => 0];
-        $true_false_questions = ["true" => 0, 'false' => 0, 'total' => 0];
-        $questions->each(function ($question) use ($exam, $answers, &$sum, &$mcq, &$true_false_questions) {
-//            $question = intval($question);
-//            $q = Question::find($question);
-            $index = intval($answers[$question->id]);
-            $option = $question->options[$index];
-            if ($option->correct) {
-                if ($question->type->id == 1)
-                    $mcq['true']++;
-                else
-                    $true_false_questions['true']++;
-            }
-            $sum += $option->correct;
-            $this->deletePreviousAnswer($question);
-            $exam->answers()->create([
-                'question_id' => $question->id,
-                'question_option_id' => $option->id,
-                'correct' => $option->correct,
-                'option_index' => $index,
-            ]);
 
-        });
-        $mcq['total'] = $exam->questions()->typeMCQ()->count();
-        $mcq['false'] = $this->getFalseAnswersCount($mcq['total'], $mcq['true']);
-        $true_false_questions['total'] = $exam->questions()->typeTrueOrFalse()->count();
-        $true_false_questions['false'] = $this->getFalseAnswersCount($true_false_questions['total'], $true_false_questions['true']);
-        $result['total_questions'] = $exam->questions->count();
-        $result['score'] = $sum;
-        $result['percent'] = ($result['score'] / $result['total_questions']) * 100;
-        return $this->createExamResult($exam, $result, $mcq, $true_false_questions);
-    }
-
-    public function getFalseAnswersCount($totalQuestions, $trueQuestions)
-    {
-        $falseResult = $totalQuestions - $trueQuestions;
-        return $falseResult < 0 ? 0 : $falseResult;
-    }
-
-    /**
-     * @param $question
-     */
-    public function deletePreviousAnswer($question)
-    {
-        $prevAnswer = TrainingExamAnswers::where('question_id', $question->id)->first();
-        if ($prevAnswer != null)
-            $prevAnswer->delete();
-    }
-
-    /**
-     * @param $exam
-     * @param $result
-     * @param $mcq
-     * @param $true_false_questions
-     * @return array
-     */
-    public function createExamResult($exam, $result, $mcq, $true_false_questions)
-    {
-        $exam->update(['examined' => 1]);
-        $exam->result()->create([
-            'marks' => $result['percent'],
-            'correct_answers' => $mcq['true'] + $true_false_questions['true'],
-            'wrong_answers' => $mcq['false'] + $true_false_questions['false'],
-        ]);
-        return ['mcq' => $mcq, 'true_false' => $true_false_questions, 'result' => $result];
-    }
-
-    /**
-     * @param $subject
-     * @param $exam
-     * @return array
-     */
     public function getLastFiveResults($subject, $exam)
     {
         $exams = auth()->user()->student->trainingExams()->subject($subject->id)->where('id', '!=', $exam->id)->latest()->take(5)->get();

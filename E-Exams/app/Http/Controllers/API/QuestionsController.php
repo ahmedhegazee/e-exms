@@ -34,12 +34,12 @@ class QuestionsController extends Controller
         if($request->has('category')&&$request->has('type')){
             $type=intval($request->get('type'));
             $category=intval($request->get('category'));
-            return QuestionResource::collection($chapter->questions()->questionType($type)->questionCategory($category)->paginate(20));
+            return QuestionResource::collection($chapter->questions()->public()->questionType($type)->questionCategory($category)->paginate(20));
         }
         else if($request->has('type')){
             $type=intval($request->get('type'));
 //            dd($chapter->questions()->questionType($type)->paginate(20));
-            return QuestionResource::collection($chapter->questions()->questionType($type)->paginate(20));
+            return QuestionResource::collection($chapter->questions()->public()->questionType($type)->paginate(20));
         }
         else{
             return response()->json(['error'=>'please select type']);
@@ -63,7 +63,7 @@ class QuestionsController extends Controller
             return response()->json(['success'=>false,'errors'=>$validator->errors()->all()]);
         }
 //        $check= auth()->user()->getProfessor()->subjects()->create($request->all());
-        $question=$chapter->questions()->create($request->only('question_content','category','question_type_id','correct_answer'));
+        $question=$chapter->questions()->create($request->only('question_content','category','question_type_id','correct_answer','is_public'));
         collect($request->get('options'))->each(function($option) use ($question) {
             $question->options()->create(['option_content'=>$option]);
         });
@@ -118,6 +118,7 @@ class QuestionsController extends Controller
             'options.*'=>'required|string|min:5|max:200',
             'correct_answer' => 'required|numeric|min:0|max:3',
             'question_type_id' => 'required|numeric',
+            'is_public'=>'required|numeric|min:0|max:1',
         ];
         $messages=[
             'question_content.required'=>'The question field is required',
