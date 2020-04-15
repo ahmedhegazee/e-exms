@@ -24,7 +24,7 @@ class ExamsTableSeeder extends Seeder
                 'end_time' => $date->addHours(2)->format('Y-m-d H:i:s'),
                 'exam_time' => '2:0',
                 'marks' => 100,
-                'exam_type' => 3,
+//                'exam_type' => 3,
                 'exam_code' => $randomCode,
             ]);
             $structure = $exam->structures()->create([

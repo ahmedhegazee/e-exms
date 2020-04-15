@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\ExamQuestionsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,8 @@ use Intervention\Image\Facades\Image;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 Route::group(['middleware'=>'localization'],function (){
     Route::post('login', 'API\UserController@login');
     Route::post('register', 'API\UserController@register');
@@ -27,7 +30,9 @@ Route::group(['middleware'=>'localization'],function (){
 Route::get('email/resend', 'VerificationApiController@resend')->name('verificationapi.resend');
     Route::group(['middleware' => ['auth:api']], function(){
         Route::post('/user/update', [\App\Http\Controllers\API\UserController::class,'update']);
-
+        Route::get("/registration-requests",[\App\Http\Controllers\API\UserController::class,'getRegistrationRequests']);
+        Route::post("/user/{user}/approve",[\App\Http\Controllers\API\UserController::class,"approveRegistrationRequest"]);
+        Route::post("/user/{user}/unapproved",[\App\Http\Controllers\API\UserController::class,"unApproveRegistrationRequest"]);
 //    Route::post('details', 'API\UserController@details');
         Route::apiResources([
             '/level' => 'API\LevelsController',
@@ -88,7 +93,9 @@ Route::post('/exam/{exam}/generate-code','ExamsController@generateCode');
 Route::fallback(function(){
     return response()->json(['message' => 'Not Found.'], 404);
 })->name('api.fallback.404');
+Route::get('/test/{exam}',function (\App\Subject\Exam $exam){
 
+});
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

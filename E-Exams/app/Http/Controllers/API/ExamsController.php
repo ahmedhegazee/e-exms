@@ -4,18 +4,24 @@ namespace App\Http\Controllers\API;
 
 use App\ExamAnswer;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExamQuestionsResource;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\ExamStructureResource;
 use App\Http\Resources\StudentResultResource;
+use App\QuestionCategory;
+use App\QuestionType;
 use App\Subject\Exam;
 use App\Subject\ExamResult;
+use App\Subject\Question;
 use App\Subject\Subject;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ExamsController extends Controller
 {
@@ -40,19 +46,39 @@ class ExamsController extends Controller
     public function store(Request $request, Subject $subject)
     {
 
-        $validator = $this->validator($request->all());
+        $validator = $this->validator($request->all(),$subject);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
         }
-        $exam = $subject->exams()->create($request->only('start_time', 'end_time', 'exam_time', 'marks', 'exam_type'));
-        collect($request->get('chapters'))->each(function ($structure) use ($exam) {
-            $exam->structures()->create([
-                'chapter_id' => $structure['id'],
-                'category' => $structure['category'],
-                'questions_count' => $structure['count'],
-            ]);
-        });
-        return ExamStructureResource::collection($exam->structures);
+//        dd(explode(" ",$request->get('start_time'))[0]);
+//        dd(Exam::where('start_time','like','%'.explode(" ",$request->get('start_time'))[0].'%')->count());
+       if(Exam::where('start_time','like','%'.explode(" ",$request->get('start_time'))[0].'%')->count()>0){
+           return response()->json(['error'=>'there is exam in this day']);
+       }
+        $dateTime = explode(' ', $request->get('start_time'));
+        $time = explode(':', $dateTime[1]);
+        $date = explode('-', $dateTime[0]);
+        $startDate= Carbon::create(intval($date[0]), intval($date[1]), intval($date[2]),intval($time[0]), intval($time[1]), intval($time[2]));
+        $timer = explode(':',$request->get('exam_time'));
+        $startDate->addHours(intval($timer[0]))->addMinutes(intval($timer[1]));
+        if($startDate!=$request->get('end_time'))
+            return \response()->json(['error'=>'there is error in the end_time . please write it correctly']);
+
+        $exam = $subject->exams()->create($request->only('start_time', 'end_time', 'exam_time', 'marks'));
+           collect($request->get('chapters'))->each(function ($structure) use ($exam) {
+               $structure =$exam->structures()->create([
+                   'chapter_id' => $structure['id'],
+                   'question_category_id' => $structure['category'],
+                   'questions_count' => $structure['count'],
+                   'question_type_id'=>$structure['type']
+               ]);
+               $ids = Question::getRandomQuestions($structure->questionCategory->id, $structure->questionType->id, $structure->questions_count)->pluck('id');
+               $exam->questions()->attach($ids);
+           });
+//        return ExamStructureResource::collection($exam->structures);
+           return  ExamQuestionsResource::collection($exam->questions);
+
+
     }
 
     /**
@@ -144,18 +170,20 @@ class ExamsController extends Controller
         return StudentResultResource::collection($results);
     }
 
-    public function validator($data)
+    public function validator($data,Subject $subject)
     {
         $rules = [
             'start_time' => 'required|date',
             'end_time' => 'required|date',
             'exam_time' => 'required|string|regex:/^[0][0-8][:][0-5][0-9]$/', //the time must be hh:mm
             'marks' => 'required|numeric',
-            'exam_type' => 'required|numeric|min:1|max:3',
-            'chapters.*.id' => 'required|numeric',
+//            'exam_type' => 'required|numeric|min:1|max:3',
+            'chapters.*.id' => ['required','numeric',Rule::in($subject->chapters->pluck('id'))],
             'chapters.*.count' => 'required|numeric',
-            'chapters.*.category' => 'required|string|regex:/^[A-C]{1}$/|min:1|max:1',
+            'chapters.*.type' => ['required','numeric',Rule::in(QuestionType::all()->pluck('id'))],
+            'chapters.*.category' => ['required','numeric',Rule::in(QuestionCategory::all()->pluck('id'))],
         ];
+        //'regex:/^[A-C]{1}$/|min:1|max:1'
         return Validator::make($data, $rules);
     }
 }

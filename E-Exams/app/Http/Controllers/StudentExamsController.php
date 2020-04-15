@@ -70,7 +70,14 @@ class StudentExamsController extends Controller
                 && $diff->diffInHours($d) < intval(explode(':', $exam->exam_time)[0])
                 &&!$exam->examined) {
                 //TODO : Making attempt here for the student
-                $questions = ExamQuestionsResource::collection($exam->questions)->jsonSerialize();
+                $count=$exam->questions->count();
+                $randomNumbers=range(0,$count-1);
+                shuffle($randomNumbers);
+                $questions=[];
+                foreach ($randomNumbers as $index){
+                    array_push($questions,$exam->questions[$index]);
+                }
+                $questions = ExamQuestionsResource::collection(collect($questions))->jsonSerialize();
                 return response()->json(['exam' => $exam->id, 'questions' => $questions]);
             }else
                 return response()->json(['error' => 'you are not allowed to enter this exam in the current time']);

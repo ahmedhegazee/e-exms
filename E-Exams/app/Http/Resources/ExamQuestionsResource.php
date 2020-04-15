@@ -14,17 +14,23 @@ class ExamQuestionsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $options=[];
-        for($i=0;$i<sizeof($this->options->toArray());$i++){
-            $options['option '.($i+1)]=$this->options[$i]->option_content;
+        $count=$this->options->count();
+        $randomNumbers=range(0,$count-1);
+        shuffle($randomNumbers);
 
+        $options=[];
+        foreach ($randomNumbers as $index){
+            array_push($options,$this->options[$index]->option_content);
         }
-        $question=[
+//        for($i=0;$i<sizeof($this->options->toArray());$i++){
+//            $options['option '.($i+1)]=$this->options[$i]->option_content;
+//
+//        }
+        return[
             'id'=>$this->id,
             'question content'=>$this->question_content,
-            'type'=>$this->type->id
+            'type'=>$this->type->id,
+            'options'=>$options
         ];
-
-        return array_merge($question,$options);
     }
 }

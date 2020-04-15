@@ -20,7 +20,7 @@ class CreateQuestionsTable extends Migration
             $table->unsignedBigInteger('question_type_id');
             $table->unsignedBigInteger('question_category_id');
             $table->unsignedBigInteger('chapter_id');
-            $table->unsignedInteger('is_public')->default(1);//0 is private  , 1 f is public
+//            $table->unsignedInteger('is_public')->default(1);//0 is private  , 1 f is public
             $table->unsignedInteger('correct_answer')->default(0);
             $table->foreign('chapter_id')->references('id')->on('chapters');
             $table->foreign('question_type_id')->references('id')->on('question_types');

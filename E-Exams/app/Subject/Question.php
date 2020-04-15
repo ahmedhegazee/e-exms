@@ -48,14 +48,14 @@ class Question extends Model
         return $query->where('question_type_id', 1);
     }
 
-    public function scopePublic($query)
-    {
-        return $query->where('is_public',1);
-    }
-    public function scopePrivate($query)
-    {
-        return $query->where('is_public',0);
-    }
+//    public function scopePublic($query)
+//    {
+//        return $query->where('is_public',1);
+//    }
+//    public function scopePrivate($query)
+//    {
+//        return $query->where('is_public',0);
+//    }
 
     public function scopeQuestionType($query, $type)
     {
@@ -90,6 +90,6 @@ class Question extends Model
 
     public static function getRandomQuestions($category, $type, $count)
     {
-        return Question::questionCategory($category)->public()->questionType($type)->get()->random($count);
+        return Question::questionCategory($category)->questionType($type)->get()->random($count);
     }
 }
