@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Department;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RegistrationRequestsResource;
 use App\ImageUtility;
+use App\Jobs\SendApprovementEmailJob;
 use App\Jobs\SendVerificationEmailJob;
 use App\Level;
+use App\Mail\ApproveMail;
 use App\Student\StudentRegistration;
 use App\User;
 use http\Env\Response;
@@ -14,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -109,8 +113,8 @@ class UserController extends Controller
     {
         $rules = [
             'academic_id' => 'required|string|regex:/^[0-9]{16}$/|unique:students',
-            'level_id' => ['required','numeric',Rule::in(Level::all()->pluck('id')->toArray())],
-            'department_id' => ['required','numeric',Rule::in(Department::all()->pluck('id')->toArray())],
+            'level_id' => ['required', 'numeric', Rule::in(Level::all()->pluck('id')->toArray())],
+            'department_id' => ['required', 'numeric', Rule::in(Department::all()->pluck('id')->toArray())],
         ];
 
         return Validator::make($data, $rules);
@@ -156,7 +160,7 @@ class UserController extends Controller
     public function successAction($user)
     {
 //        $user->sendApiEmailVerificationNotification();
-        SendVerificationEmailJob::dispatch($user)->delay(now()->addMinutes(3));
+        SendVerificationEmailJob::dispatch($user)->delay(now()->addMinutes(1));
         $success['message'] = 'Please confirm yourself by clicking on verify user button sent to you on your email';
 //        $success['token'] = $user->createToken('auth_token')->accessToken;
         $success['full_name'] = $user->full_name;
@@ -179,38 +183,33 @@ class UserController extends Controller
         ]);
         if ($validator->fails())
             return response()->json(['errors' => $validator->errors()]);
-        if ($request->has('image')){
+        if ($request->has('image')) {
 
-            $images=$this->updateImage($request->file('image'));
-            return response()->json(array_merge(['success'=>true],$images));
+            $images = $this->updateImage($request->file('image'));
+            return response()->json(array_merge(['success' => true], $images));
         }
 
         if ($request->has('current_password')
             && $request->has('new_password')) {
-            $currentPassword=$request->get('current_password');
-            $newPassword=$request->get('new_password');
-            if(Hash::check($currentPassword,auth()->user()->password))
-            {
-                auth()->user()->update(['password'=>bcrypt($newPassword)]);
-                return response()->json(['success'=>'password is updated successfully']);
-            }
-            else
-                return response()->json(['error'=>'write current password correctly']);
+            $currentPassword = $request->get('current_password');
+            $newPassword = $request->get('new_password');
+            if (Hash::check($currentPassword, auth()->user()->password)) {
+                auth()->user()->update(['password' => bcrypt($newPassword)]);
+                return response()->json(['success' => 'password is updated successfully']);
+            } else
+                return response()->json(['error' => 'write current password correctly']);
         }
         if ($request->has('current_email')
             && $request->has('email')) {
-            $currentEmail=$request->get('current_email');
-            $newEmail=$request->get('email');
-            if(auth()->user()->email==$currentEmail)
-            {
-                auth()->user()->update(['email'=>$newEmail]);
-                return response()->json(['success'=>'email is updated successfully']);
-            }
-            else
-                return response()->json(['error'=>'write current email correctly']);
-        }
-        else{
-            return \response()->json(['error'=>'please enter password or email or upload profile image.']);
+            $currentEmail = $request->get('current_email');
+            $newEmail = $request->get('email');
+            if (auth()->user()->email == $currentEmail) {
+                auth()->user()->update(['email' => $newEmail]);
+                return response()->json(['success' => 'email is updated successfully']);
+            } else
+                return response()->json(['error' => 'write current email correctly']);
+        } else {
+            return \response()->json(['error' => 'please enter password or email or upload profile image.']);
         }
     }
 
@@ -226,10 +225,10 @@ class UserController extends Controller
         $thumbStr = ImageUtility::storeImage($image, '/storage/images/thumbnail/', 15, 15);
         $profileStr = ImageUtility::storeImage($image, '/storage/images/profile/', 64, 64);
         $originalStr = "/storage/" . $image->store('images/original', 'public');
-        $user=Auth::user();
-        $user->thumbnail_image=$thumbStr;
-        $user->profile_image=$profileStr;
-        $user->original_image=$originalStr;
+        $user = Auth::user();
+        $user->thumbnail_image = $thumbStr;
+        $user->profile_image = $profileStr;
+        $user->original_image = $originalStr;
         $user->save();
 //        $user->update([
 //            'thumbnail_image' => $thumbStr,
@@ -237,10 +236,45 @@ class UserController extends Controller
 //            'original_image' => $originalStr,
 //        ]);
 //        dd(auth()->user());
-       return ['thumb_image'=>$thumbStr,'profile_image'=>$profileStr];
+        return ['thumb_image' => $thumbStr, 'profile_image' => $profileStr];
 
     }
 
+    public function getRegistrationRequests()
+    {
+       $users= User::unapproved()->verified()->get();
+        return RegistrationRequestsResource::collection($users);
+    }
+
+    public function approveRegistrationRequest(User $user)
+    {
+//        $user->update(['approved'=>1]);
+        $user->approved=1;
+        $user->save();
+        SendApprovementEmailJob::dispatch("We are happy to approve you successfully.",$user->full_name,$user->email)->delay(now()->addMinutes(1));
+        return response()->json(['success'=>true]);
+    }
+    public function unApproveRegistrationRequest(User $user)
+    {
+        if($user->approved!=1){
+            if(is_null($user->student))
+            {
+                $user->professor->delete();
+
+            }else{
+                $student=$user->student;
+                $student->registrations->last()->delete();
+                $student->delete();
+            }
+            SendApprovementEmailJob::dispatch("We are sorry to not approve you.",$user->full_name,$user->email)->delay(now()->addMinutes(1));
+            $user->roles()->detach($user->roles);
+            $user->delete();
+            return response()->json(['success'=>true]);
+        }else{
+            return \response()->json(['success'=>false,"error"=>"this user is approved"]);
+        }
+
+    }
 //    /**
 //     * details api
 //     *

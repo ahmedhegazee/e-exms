@@ -26,10 +26,10 @@ class Exam extends Model
         return $this->belongsToMany(Question::class)->withTimestamps();
     }
 
-    public function scopeType($query, $type)
-    {
-        return $query->where('exam_type', $type);
-    }
+//    public function scopeType($query, $type)
+//    {
+//        return $query->where('exam_type', $type);
+//    }
 
     public static function correctingAnswers($exam, $answers, $questions, $isTrainingExam = false)// mode true for training , false for exams
     {

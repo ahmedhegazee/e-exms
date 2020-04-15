@@ -17,7 +17,7 @@ class ExamResultResource extends JsonResource
         return [
             'id'=>$this->exam->id,
             'date'=>$this->exam->start_time,
-            'type'=>$this->getExamType($this->exam->exam_type),
+//            'type'=>$this->getExamType($this->exam->exam_type),
             'score'=>$this->marks,
             'success'=>$this->success,
         ];

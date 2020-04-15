@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExamQuestionsResource;
 use App\Http\Resources\ExamStructureResource;
 use App\Http\Resources\TrainingExamsResultResource;
+use App\QuestionCategory;
+use App\QuestionType;
 use App\Subject\Exam;
 use App\Subject\Question;
 use App\Subject\Subject;
@@ -17,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TrainingExamsController extends Controller
 {
@@ -39,7 +42,7 @@ class TrainingExamsController extends Controller
      */
     public function store(Request $request, Subject $subject)
     {
-        $validator = $this->validator($request->all());
+        $validator = $this->validator($request->all(),$subject);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
         }
@@ -147,13 +150,13 @@ class TrainingExamsController extends Controller
         return Validator::make($data, $rules);
     }
 
-    public function validator($data)
+    public function validator($data,Subject $subject)
     {
         $rules = [
-            'structures.*.chapter' => 'required|numeric',
+            'structures.*.chapter' => ['required','numeric',Rule::in($subject->chapters->pluck('id'))],
             'structures.*.count' => 'required|numeric',
-            'structures.*.category' => 'required|numeric|min:1|max:3',
-            'structures.*.type' => 'required|numeric|min:1|max:2',
+            'structures.*.category' => ['required','numeric',Rule::in(QuestionCategory::all()->pluck('id'))],
+            'structures.*.type' => ['required','numeric',Rule::in(QuestionType::all()->pluck('id'))],
         ];
         return Validator::make($data, $rules);
     }

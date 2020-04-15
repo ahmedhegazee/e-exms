@@ -57,4 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyApiEmail); // my notification
     }
+
+    public function scopeUnapproved($query)
+    {
+        return $query->where('approved',0);
+    }
+
+    public function scopeVerified($query)
+    {
+        return $query->where("email_verified_at","!=",null);
+    }
 }
