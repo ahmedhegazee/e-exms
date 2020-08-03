@@ -1,0 +1,40 @@
+.items-container {
+    overflow-x: scroll;
+    width: 98%;
+    flex-wrap: nowrap !important;
+}
+
+.container-title {
+    font-size: 12pt;
+    font-weight: 600;
+}
+
+.item img {
+    height: 60px;
+    width: 30%;
+}
+
+.item {
+    border-radius: 15px;
+    padding-top: 50px;
+    padding-left: 20px;
+    background-color: #fff;
+    box-shadow: 4px 3px 13px 0px rgba(0, 0, 0, 0.2);
+    color: #000;
+    text-decoration: none;
+}
+
+.shadow {
+    box-shadow: 4px 3px 13px 0px rgba(0, 0, 0, 0.2);
+}
+
+.item:hover {
+    color: #fff;
+    background-color: #1bd371;
+    text-decoration: none;
+}
+
+.item-title {
+    font-size: 10pt;
+    font-weight: 300;
+}
