@@ -18,4 +18,12 @@ export default {
   getResults(subject) {
     return helpers.getInstance().get(`subject/${subject}/analysis`);
   },
+  addChapter(subject, chapter) {
+    return helpers.getInstance().post(`subject/${subject}/chapter`, chapter);
+  },
+  updateChapter(subject, chapter) {
+    return helpers
+      .getInstance()
+      .put(`subject/${subject}/chapter/${chapter.id}`, chapter);
+  },
 };

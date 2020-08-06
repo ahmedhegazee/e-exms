@@ -5,6 +5,7 @@ import store from "../store/store";
 import mainRoutes from "./mainRoutes";
 import subjectRoutes from "../modules/subject/routes/router";
 import studentRoutes from "../modules/student/routes/router";
+import professorRoutes from "../modules/professor/router";
 import auth from "./authRoutes";
 import errors from "./errorRoutes";
 Vue.use(VueRouter);
@@ -12,7 +13,8 @@ const baseRoutes = auth.concat(errors);
 let routes = baseRoutes
   .concat(mainRoutes)
   .concat(subjectRoutes)
-  .concat(studentRoutes);
+  .concat(studentRoutes)
+  .concat(professorRoutes);
 const router = new VueRouter({
   base: "/",
   mode: "history",
@@ -32,7 +34,7 @@ router.beforeEach((routeTo, routeFrom, next) => {
   }
   setTimeout(() => {
     next();
-  }, 2000);
+  }, 4000);
 });
 router.afterEach(() => {
   NProgress.done();

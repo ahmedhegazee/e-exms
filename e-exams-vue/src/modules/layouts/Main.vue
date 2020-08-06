@@ -82,7 +82,7 @@ export default {
     if (this.isProfessor) this.links = professorLinks;
   },
   computed: {
-    ...mapGetters("user", ["userData", "isProfessor", "isAdmin", "iStudent"])
+    ...mapGetters("user", ["userData", "isProfessor", "isAdmin", "isStudent"])
   },
   components: {
     Aside

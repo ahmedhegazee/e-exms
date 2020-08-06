@@ -21,7 +21,6 @@ export default {
       type: Array
     },
     link: {
-      required: true,
       type: Boolean,
       default: true
     }

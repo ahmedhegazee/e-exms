@@ -6,6 +6,8 @@ export default {
     subjects: null,
     recentExams: null,
     topStudents: null,
+    currentSubject: null,
+    currentChapter: null,
   },
   getters: {
     professorSubjects: (state) => {
@@ -16,6 +18,12 @@ export default {
     },
     topStudents: (state) => {
       return state.topStudents;
+    },
+    currentSubject: (state) => {
+      return state.currentSubject;
+    },
+    currentChapter: (state) => {
+      return state.currentChapter;
     },
   },
   mutations: {
@@ -30,6 +38,18 @@ export default {
     SET_TOP_STUDENTS(state, studentsData) {
       state.topStudents = studentsData;
       localStorage.setItem("topStudents", JSON.stringify(studentsData));
+    },
+    SET_CURRENT_SUBJECT(state, subject) {
+      state.currentSubject = subject;
+    },
+    ADD_CHAPTER(state, chapter) {
+      state.currentSubject.chapters.push(chapter);
+    },
+    SET_CURRENT_CHAPTER(state, chapter) {
+      state.currentChapter = chapter;
+    },
+    UPDATE_CHAPTER(state, chapter) {
+      state.currentChapter = chapter;
     },
   },
   actions: {
@@ -47,6 +67,20 @@ export default {
       return ProfessorServices.getTopStudents().then((response) =>
         commit("SET_TOP_STUDENTS", response.data)
       );
+    },
+    addNewChapter({ commit, state }, chapter) {
+      return ProfessorServices.addChapter(
+        state.currentSubject.id,
+        chapter
+      ).then((response) => commit("ADD_CHAPTER", response.data));
+    },
+    updateChapter({ commit, state }, chapter) {
+      return ProfessorServices.updateChapter(
+        state.currentSubject.id,
+        chapter
+      ).then((response) => {
+        commit("UPDATE_CHAPTER", response.data);
+      });
     },
   },
 };
